@@ -7,6 +7,13 @@ import AdminDashboard from './pages/AdminDashboard';
 import InscriptionsPage from './pages/InscriptionsPage';
 import EtudiantDashboard from './pages/EtudiantDashboard';
 import SoumissionInscription from './pages/SoumissionInscription';
+import GestionEtudiantsPage from './pages/GestionEtudiantsPage';
+import GestionPaiementsPage from './pages/GestionPaiementsPage';
+import TransportManagementPage from './pages/TransportManagementPage';
+import BusChauffeursPage from './pages/BusChauffeursPage';
+import EtablissementsPage from './pages/EtablissementsPage';
+import TarifManagementPage from './pages/TarifManagementPage';
+import QRScannerPage from './pages/QRScannerPage';
 
 const ProtectedRoute = ({ children, role }: { children: React.ReactNode, role?: string }) => {
   const { isAuthenticated, user } = useAuth();
@@ -43,9 +50,45 @@ function AppRoutes() {
         </ProtectedRoute>
       } />
 
-      <Route path="/admin/*" element={
+      <Route path="/admin/etudiants" element={
         <ProtectedRoute role="ADMIN">
-          <div className="p-8"><h1>Admin Page (Work in Progress)</h1></div>
+          <GestionEtudiantsPage />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/admin/paiements" element={
+        <ProtectedRoute role="ADMIN">
+          <GestionPaiementsPage />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/admin/transport" element={
+        <ProtectedRoute role="ADMIN">
+          <TransportManagementPage />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/admin/bus-chauffeurs" element={
+        <ProtectedRoute role="ADMIN">
+          <BusChauffeursPage />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/admin/etablissements" element={
+        <ProtectedRoute role="ADMIN">
+          <EtablissementsPage />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/admin/tarifs" element={
+        <ProtectedRoute role="ADMIN">
+          <TarifManagementPage />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/admin/scanner" element={
+        <ProtectedRoute role="ADMIN">
+          <QRScannerPage />
         </ProtectedRoute>
       } />
 

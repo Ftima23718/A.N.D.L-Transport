@@ -1,8 +1,11 @@
 package ma.andl.service;
 
+import ma.andl.dto.request.PaiementRequest;
 import ma.andl.dto.response.PaiementResponse;
+import ma.andl.model.entity.Inscription;
 import ma.andl.model.entity.Paiement;
 import ma.andl.model.enums.StatutPaiement;
+import ma.andl.repository.InscriptionRepository;
 import ma.andl.repository.PaiementRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,9 +18,27 @@ import java.util.stream.Collectors;
 public class PaiementService {
 
     private final PaiementRepository paiementRepository;
+    private final InscriptionRepository inscriptionRepository;
 
-    public PaiementService(PaiementRepository paiementRepository) {
+    public PaiementService(PaiementRepository paiementRepository, InscriptionRepository inscriptionRepository) {
         this.paiementRepository = paiementRepository;
+        this.inscriptionRepository = inscriptionRepository;
+    }
+
+    @Transactional
+    public void enregistrerPaiement(PaiementRequest request) {
+        Inscription inscription = inscriptionRepository.findById(request.getInscriptionId())
+                .orElseThrow(() -> new RuntimeException("Inscription non trouvée"));
+        
+        Paiement paiement = Paiement.builder()
+                .montant(request.getMontant())
+                .datePaiement(LocalDateTime.now())
+                .statut(StatutPaiement.PAYE)
+                .methodePaiement(request.getMethodePaiement())
+                .inscription(inscription)
+                .build();
+        
+        paiementRepository.save(paiement);
     }
 
     public List<PaiementResponse> getAll() {

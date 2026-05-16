@@ -1,11 +1,15 @@
 package ma.andl.service;
 
 import ma.andl.dto.response.StatsResponse;
-import ma.andl.model.enums.StatutBus;
 import ma.andl.model.enums.StatutInscription;
 import ma.andl.model.enums.StatutPaiement;
 import ma.andl.repository.*;
 import org.springframework.stereotype.Service;
+
+import java.time.format.TextStyle;
+import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class AdminService {
@@ -31,14 +35,36 @@ public class AdminService {
     public StatsResponse getStats() {
         return StatsResponse.builder()
                 .totalEtudiants(etudiantRepository.count())
-                .inscriptionsEnAttente(inscriptionRepository.count()) // Normalement filter par statut
-                .inscriptionsValidees(inscriptionRepository.count()) // Placeholder filter
+                .inscriptionsEnAttente(inscriptionRepository.countByStatut(StatutInscription.EN_ATTENTE))
+                .inscriptionsValidees(inscriptionRepository.countByStatut(StatutInscription.VALIDEE))
                 .totalMontantEncaisse(paiementRepository.findAll().stream()
                         .filter(p -> p.getStatut() == StatutPaiement.PAYE)
                         .mapToDouble(p -> p.getMontant())
                         .sum())
                 .totalEtablissements(etablissementRepository.count())
-                .totalBusActive(busRepository.count()) // Placeholder filter StatutBus.ACTIF
+                .totalBusActive(busRepository.count())
+                .inscriptionsParMois(getInscriptionsParMois())
+                .revenusParMois(getRevenusParMois())
                 .build();
+    }
+
+    private Map<String, Long> getInscriptionsParMois() {
+        return inscriptionRepository.findAll().stream()
+                .filter(i -> i.getDateCreation() != null)
+                .collect(Collectors.groupingBy(
+                        i -> i.getDateCreation().getMonth().getDisplayName(TextStyle.SHORT, Locale.FRENCH)
+                                + " " + i.getDateCreation().getYear(),
+                        Collectors.counting()
+                ));
+    }
+
+    private Map<String, Double> getRevenusParMois() {
+        return paiementRepository.findAll().stream()
+                .filter(p -> p.getStatut() == StatutPaiement.PAYE && p.getDatePaiement() != null)
+                .collect(Collectors.groupingBy(
+                        p -> p.getDatePaiement().getMonth().getDisplayName(TextStyle.SHORT, Locale.FRENCH)
+                                + " " + p.getDatePaiement().getYear(),
+                        Collectors.summingDouble(p -> p.getMontant())
+                ));
     }
 }

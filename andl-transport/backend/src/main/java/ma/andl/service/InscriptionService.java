@@ -24,15 +24,18 @@ public class InscriptionService {
     private final EtudiantRepository etudiantRepository;
     private final LigneRepository ligneRepository;
     private final BadgeService badgeService;
+    private final EmailService emailService;
 
     public InscriptionService(InscriptionRepository inscriptionRepository, 
                               EtudiantRepository etudiantRepository,
                               LigneRepository ligneRepository,
-                              BadgeService badgeService) {
+                              BadgeService badgeService,
+                              EmailService emailService) {
         this.inscriptionRepository = inscriptionRepository;
         this.etudiantRepository = etudiantRepository;
         this.ligneRepository = ligneRepository;
         this.badgeService = badgeService;
+        this.emailService = emailService;
     }
 
     @Transactional
@@ -64,6 +67,10 @@ public class InscriptionService {
         
         // Générer le badge automatiquement à la validation
         badgeService.generateBadge(id);
+
+        // Envoyer email
+        emailService.sendInscriptionValidation(inscription.getEtudiant().getEmail(), 
+                inscription.getEtudiant().getNom() + " " + inscription.getEtudiant().getPrenom());
     }
 
     @Transactional
@@ -73,6 +80,10 @@ public class InscriptionService {
         inscription.setStatut(StatutInscription.REJETEE);
         inscription.setMotifRejet(motif);
         inscriptionRepository.save(inscription);
+
+        // Envoyer email
+        emailService.sendInscriptionRejet(inscription.getEtudiant().getEmail(), 
+                inscription.getEtudiant().getNom() + " " + inscription.getEtudiant().getPrenom(), motif);
     }
 
     public List<InscriptionResponse> getMesInscriptions(String email) {

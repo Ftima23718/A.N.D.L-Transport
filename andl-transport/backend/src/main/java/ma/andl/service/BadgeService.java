@@ -59,6 +59,21 @@ public class BadgeService {
         return mapToResponse(badge);
     }
 
+    public BadgeResponse validateBadge(String qrContent) {
+        Badge badge = badgeRepository.findByCodeQr(qrContent)
+                .orElseThrow(() -> new RuntimeException("Badge invalide ou inconnu"));
+        
+        if (!badge.isEstValide()) {
+            throw new RuntimeException("Ce badge a été désactivé");
+        }
+        
+        if (badge.getDateExpiration().isBefore(LocalDate.now())) {
+            throw new RuntimeException("Ce badge est expiré depuis le " + badge.getDateExpiration());
+        }
+        
+        return mapToResponse(badge);
+    }
+
     private String generateQRCodeImage(String text) {
         try {
             QRCodeWriter qrCodeWriter = new QRCodeWriter();

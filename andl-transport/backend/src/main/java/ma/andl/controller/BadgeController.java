@@ -3,6 +3,7 @@ package ma.andl.controller;
 import ma.andl.dto.response.BadgeResponse;
 import ma.andl.service.BadgeService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,5 +22,11 @@ public class BadgeController {
     @GetMapping("/inscription/{id}")
     public ResponseEntity<BadgeResponse> getBadgeByInscription(@PathVariable Long id) {
         return ResponseEntity.ok(badgeService.getBadgeByInscriptionId(id));
+    }
+
+    @GetMapping("/valider/{qrContent}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CHAUFFEUR')")
+    public ResponseEntity<BadgeResponse> validateBadge(@PathVariable String qrContent) {
+        return ResponseEntity.ok(badgeService.validateBadge(qrContent));
     }
 }

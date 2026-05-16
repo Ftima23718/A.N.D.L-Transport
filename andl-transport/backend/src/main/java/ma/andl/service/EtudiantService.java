@@ -1,5 +1,6 @@
 package ma.andl.service;
 
+import ma.andl.dto.request.EtudiantUpdateRequest;
 import ma.andl.dto.response.EtudiantResponse;
 import ma.andl.model.entity.Etudiant;
 import ma.andl.repository.EtudiantRepository;
@@ -29,6 +30,24 @@ public class EtudiantService {
         return etudiantRepository.findById(id)
                 .map(this::mapToResponse)
                 .orElseThrow(() -> new RuntimeException("Étudiant non trouvé"));
+    }
+
+    @Transactional
+    public void update(Long id, EtudiantUpdateRequest request) {
+        Etudiant etudiant = etudiantRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Étudiant non trouvé"));
+        
+        etudiant.setNom(request.getNom());
+        etudiant.setPrenom(request.getPrenom());
+        etudiant.setEmail(request.getEmail());
+        etudiant.setTelephone(request.getTelephone());
+        etudiant.setDateNaissance(request.getDateNaissance());
+        etudiant.setFiliere(request.getFiliere());
+        etudiant.setNiveauScolaire(request.getNiveauScolaire());
+        etudiant.setAnneeScolaire(request.getAnneeScolaire());
+        etudiant.setActif(request.isActif());
+        
+        etudiantRepository.save(etudiant);
     }
 
     @Transactional

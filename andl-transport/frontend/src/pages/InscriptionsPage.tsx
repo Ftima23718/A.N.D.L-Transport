@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Search, Check, X, Eye, Download, AlertTriangle, Filter } from 'lucide-react';
+import { Search, Check, X, Eye, Download, AlertTriangle } from 'lucide-react';
 import api from '../services/api';
 
 const InscriptionsPage: React.FC = () => {
   const [inscriptions, setInscriptions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+
+  const [selectedInsc, setSelectedInsc] = useState<any>(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [isRejetModalOpen, setIsRejetModalOpen] = useState(false);
+  const [motifRejet, setMotifRejet] = useState('');
 
   const fetchInscriptions = async () => {
     try {
@@ -22,17 +27,45 @@ const InscriptionsPage: React.FC = () => {
     fetchInscriptions();
   }, []);
 
-  const handleAction = async (id: number, action: 'valider' | 'rejeter', motif?: string) => {
+  const handleAction = async (id: number, action: 'valider' | 'rejeter') => {
     try {
       if (action === 'valider') {
         await api.patch(`/admin/inscriptions/${id}/valider`);
+        fetchInscriptions();
       } else {
-        await api.patch(`/admin/inscriptions/${id}/rejeter`, { motif: motif || 'Refusé' });
+        setSelectedInsc(inscriptions.find(i => i.id === id));
+        setIsRejetModalOpen(true);
       }
-      fetchInscriptions();
     } catch (err) {
       alert("Erreur lors de l'action");
     }
+  };
+
+  const submitRejet = async () => {
+    try {
+      await api.patch(`/admin/inscriptions/${selectedInsc.id}/rejeter`, motifRejet, {
+        headers: { 'Content-Type': 'text/plain' }
+      });
+      setIsRejetModalOpen(false);
+      setMotifRejet('');
+      fetchInscriptions();
+    } catch (err) {
+      alert("Erreur lors du rejet");
+    }
+  };
+
+  const handleExport = async (format: 'excel' | 'pdf') => {
+      try {
+          const response = await api.get(`/api/exports/inscriptions/${format}`, { responseType: 'blob' });
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', `inscriptions.${format === 'excel' ? 'xlsx' : 'pdf'}`);
+          document.body.appendChild(link);
+          link.click();
+      } catch (err) {
+          alert("Erreur lors de l'exportation");
+      }
   };
 
   const filtered = inscriptions.filter(i =>
@@ -61,13 +94,17 @@ const InscriptionsPage: React.FC = () => {
             />
           </div>
           <div className="flex gap-2">
-            <button className="flex items-center gap-2 px-4 py-2 bg-slate-50 text-slate-600 rounded-xl hover:bg-slate-100 transition-colors font-medium">
-              <Filter className="w-4 h-4" />
-              <span>Filtrer</span>
-            </button>
-            <button className="flex items-center gap-2 px-4 py-2 bg-slate-50 text-slate-600 rounded-xl hover:bg-slate-100 transition-colors font-medium">
+            <button 
+                onClick={() => handleExport('excel')}
+                className="flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-600 rounded-xl hover:bg-emerald-100 transition-colors font-medium">
               <Download className="w-4 h-4" />
-              <span>Exporter</span>
+              <span>Excel</span>
+            </button>
+            <button 
+                onClick={() => handleExport('pdf')}
+                className="flex items-center gap-2 px-4 py-2 bg-rose-50 text-rose-600 rounded-xl hover:bg-rose-100 transition-colors font-medium">
+              <Download className="w-4 h-4" />
+              <span>PDF</span>
             </button>
           </div>
         </div>
@@ -145,7 +182,10 @@ const InscriptionsPage: React.FC = () => {
                           </button>
                         </>
                       )}
-                      <button className="p-2 bg-slate-50 text-slate-600 rounded-xl hover:bg-slate-100 transition-colors shadow-sm">
+                      <button 
+                        onClick={() => { setSelectedInsc(insc); setIsDetailModalOpen(true); }}
+                        className="p-2 bg-slate-50 text-slate-600 rounded-xl hover:bg-slate-100 transition-colors shadow-sm"
+                      >
                         <Eye className="w-4 h-4" />
                       </button>
                     </div>
@@ -163,6 +203,80 @@ const InscriptionsPage: React.FC = () => {
           </table>
         </div>
       </div>
+
+      {/* Detail Modal */}
+      {isDetailModalOpen && selectedInsc && (
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-3xl w-full max-w-lg shadow-2xl relative overflow-hidden">
+                <div className="bg-blue-600 h-2 w-full" />
+                <div className="p-8">
+                    <div className="flex justify-between items-start mb-6">
+                        <h2 className="text-2xl font-bold text-slate-800">Détail Inscription</h2>
+                        <button onClick={() => setIsDetailModalOpen(false)} className="text-slate-400 hover:text-slate-600">
+                            <X className="w-6 h-6" />
+                        </button>
+                    </div>
+                    <div className="space-y-4">
+                        <div className="flex justify-between border-b pb-2">
+                            <span className="text-slate-500">Étudiant</span>
+                            <span className="font-semibold text-slate-800">{selectedInsc.etudiantPrenom} {selectedInsc.etudiantNom}</span>
+                        </div>
+                        <div className="flex justify-between border-b pb-2">
+                            <span className="text-slate-500">Abonnement</span>
+                            <span className="font-semibold text-slate-800">{selectedInsc.typeAbonnement}</span>
+                        </div>
+                        <div className="flex justify-between border-b pb-2">
+                            <span className="text-slate-500">Ligne</span>
+                            <span className="font-semibold text-slate-800">{selectedInsc.ligneNom || '-'}</span>
+                        </div>
+                        <div className="flex justify-between border-b pb-2">
+                            <span className="text-slate-500">Statut</span>
+                            <span className="font-semibold text-slate-800">{selectedInsc.statut}</span>
+                        </div>
+                        {selectedInsc.motifRejet && (
+                            <div className="bg-rose-50 p-3 rounded-xl">
+                                <p className="text-xs font-bold text-rose-600 uppercase mb-1">Motif du rejet</p>
+                                <p className="text-sm text-rose-700">{selectedInsc.motifRejet}</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </div>
+      )}
+
+      {/* Reject Modal */}
+      {isRejetModalOpen && (
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl relative overflow-hidden">
+                <div className="bg-rose-600 h-2 w-full" />
+                <div className="p-8">
+                    <h2 className="text-2xl font-bold text-slate-800 mb-4">Motif du Rejet</h2>
+                    <textarea 
+                        className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-rose-500 outline-none h-32 mb-6"
+                        placeholder="Saisissez la raison du rejet..."
+                        value={motifRejet}
+                        onChange={(e) => setMotifRejet(e.target.value)}
+                    />
+                    <div className="flex justify-end gap-3">
+                        <button 
+                            onClick={() => setIsRejetModalOpen(false)}
+                            className="px-6 py-2 text-slate-600 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors font-semibold"
+                        >
+                            Annuler
+                        </button>
+                        <button 
+                            onClick={submitRejet}
+                            disabled={!motifRejet.trim()}
+                            className="px-6 py-2 bg-rose-600 text-white rounded-xl hover:bg-rose-700 transition-all font-semibold shadow-md shadow-rose-200 disabled:opacity-50"
+                        >
+                            Confirmer le rejet
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+      )}
     </div>
   );
 };

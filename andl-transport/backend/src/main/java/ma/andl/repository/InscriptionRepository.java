@@ -13,4 +13,5 @@ import java.util.List;
 public interface InscriptionRepository extends JpaRepository<Inscription, Long> {
     List<Inscription> findByEtudiantEmail(String email);
     Page<Inscription> findByStatut(StatutInscription statut, Pageable pageable);
+    long countByStatut(StatutInscription statut);
 }

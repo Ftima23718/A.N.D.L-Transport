@@ -17,7 +17,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isAdmin }) => {
     { to: '/admin/inscriptions', icon: Bus, label: 'Inscriptions' },
     { to: '/admin/paiements', icon: CreditCard, label: 'Paiements' },
     { to: '/admin/transport', icon: MapPin, label: 'Transport' },
+    { to: '/admin/bus-chauffeurs', icon: Bus, label: 'Bus & Chauffeurs' },
     { to: '/admin/etablissements', icon: School, label: 'Établissements' },
+    { to: '/admin/tarifs', icon: CreditCard, label: 'Tarifs' },
+    { to: '/admin/scanner', icon: MapPin, label: 'Scanner QR' },
   ];
 
   const studentLinks = [

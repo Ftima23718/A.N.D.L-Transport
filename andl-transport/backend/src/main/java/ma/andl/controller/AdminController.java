@@ -44,6 +44,17 @@ public class AdminController {
         return ResponseEntity.ok(etudiantService.search(keyword, pageable));
     }
 
+    @GetMapping("/etudiants/{id}")
+    public ResponseEntity<EtudiantResponse> getEtudiantById(@PathVariable Long id) {
+        return ResponseEntity.ok(etudiantService.getById(id));
+    }
+
+    @PutMapping("/etudiants/{id}")
+    public ResponseEntity<Void> updateEtudiant(@PathVariable Long id, @RequestBody ma.andl.dto.request.EtudiantUpdateRequest request) {
+        etudiantService.update(id, request);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/inscriptions")
     public ResponseEntity<Page<InscriptionResponse>> getAllInscriptions(Pageable pageable) {
         return ResponseEntity.ok(inscriptionService.getAll(pageable));
