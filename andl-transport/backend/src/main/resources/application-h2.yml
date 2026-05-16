@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:andl_transport;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+jwt:
+  secret: andl-transport-h2-dev-secret-key-minimum-32-chars
+  expiration: 86400000
+
+logging:
+  level:
+    ma.andl: DEBUG
+    org.springframework.security: DEBUG

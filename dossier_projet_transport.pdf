@@ -1,0 +1,617 @@
+# 📋 Dossier de Projet
+## Étude et mise en place d'une application web de gestion des inscriptions des étudiants au service de transport
+
+---
+
+## 1. Cahier des Charges
+
+### 1.1 Contexte et Problématique
+
+De nombreux établissements universitaires proposent un service de transport interne ou inter-campus à leurs étudiants. La gestion manuelle des inscriptions (formulaires papier, listes Excel) engendre des problèmes récurrents : pertes d'information, lenteur du traitement, manque de suivi en temps réel, difficulté à générer des statistiques fiables.
+
+La présente application vise à **digitaliser et centraliser** toutes les opérations liées à l'inscription des étudiants au service de transport universitaire.
+
+### 1.2 Objectifs du Projet
+
+| # | Objectif |
+|---|----------|
+| 1 | Permettre aux étudiants de s'inscrire en ligne au service de transport |
+| 2 | Permettre aux administrateurs de gérer et valider les inscriptions |
+| 3 | Gérer les lignes de bus, horaires et arrêts |
+| 4 | Éditer et télécharger des badges / cartes de transport |
+| 5 | Générer des statistiques et rapports d'utilisation |
+| 6 | Envoyer des notifications automatiques (email/SMS) |
+
+### 1.3 Périmètre Fonctionnel
+
+- **Inclus** : inscription, validation, gestion des lignes/bus, paiement, notifications, badges, statistiques.
+- **Exclu** : GPS temps réel des bus, application mobile native.
+
+### 1.4 Contraintes Techniques
+
+| Type | Détail |
+|------|--------|
+| Technologiques | Application web responsive (desktop + mobile) |
+| Sécurité | Authentification sécurisée (JWT / sessions), HTTPS |
+| Performance | Temps de réponse < 2 secondes |
+| Base de données | Relationnelle (MySQL / PostgreSQL) |
+| Hébergement | Serveur local ou cloud (Linux + Apache/Nginx) |
+| Langues | Français (interface principale) |
+
+### 1.5 Acteurs du Système
+
+| Acteur | Rôle |
+|--------|------|
+| **Étudiant** | S'inscrit, consulte son statut, télécharge son badge |
+| **Administrateur** | Gère les inscriptions, lignes, bus, paiements |
+| **Responsable transport** | Supervise les lignes, affecte les bus et chauffeurs |
+| **Chauffeur** | Consulte son planning et sa liste de passagers |
+| **Système** | Envoie des notifications automatiques |
+
+---
+
+## 2. Fonctionnalités de l'Application
+
+### 2.1 Module Authentification
+
+- [ ] Inscription (création de compte étudiant)
+- [ ] Connexion / Déconnexion sécurisée
+- [ ] Récupération de mot de passe (par email)
+- [ ] Gestion des rôles (Étudiant, Admin, Responsable, Chauffeur)
+- [ ] Tableau de bord personnalisé par rôle
+
+### 2.2 Module Inscription au Transport
+
+- [ ] Formulaire d'inscription avec choix : ligne, arrêt, abonnement (mensuel / semestriel / annuel)
+- [ ] Téléchargement des pièces justificatives (carte étudiante, photo)
+- [ ] Suivi du statut de la demande (En attente / Validée / Rejetée)
+- [ ] Renouvellement d'inscription
+- [ ] Historique des inscriptions
+
+### 2.3 Module Gestion des Lignes & Bus
+
+- [ ] CRUD des lignes de transport (nom, trajet, horaires)
+- [ ] CRUD des arrêts (nom, position)
+- [ ] Affectation des bus aux lignes
+- [ ] Gestion des capacités de places disponibles
+- [ ] Planning hebdomadaire des trajets
+
+### 2.4 Module Paiement
+
+- [ ] Calcul automatique du tarif selon le type d'abonnement
+- [ ] Saisie du paiement (espèces / virement — enregistrement manuel ou intégration passerelle)
+- [ ] Génération de reçu téléchargeable (PDF)
+- [ ] Historique des paiements
+
+### 2.5 Module Badge / Carte de Transport
+
+- [ ] Génération automatique d'un badge numérique (QR code unique)
+- [ ] Téléchargement du badge en PDF
+- [ ] Renouvellement du badge à chaque inscription
+- [ ] Vérification du badge par QR code scanner
+
+### 2.6 Module Notifications
+
+- [ ] Notification email à chaque changement de statut de dossier
+- [ ] Rappel d'expiration d'abonnement (J-7, J-1)
+- [ ] Notification de nouvelle inscription pour l'admin
+- [ ] Alertes en cas de changement de ligne / horaire
+
+### 2.7 Module Administration & Rapports
+
+- [ ] Tableau de bord avec KPIs (nb inscrits, taux de remplissage, revenus)
+- [ ] Liste et filtrage des étudiants inscrits
+- [ ] Validation / rejet des dossiers d'inscription
+- [ ] Exportation des données (Excel / PDF)
+- [ ] Rapports statistiques par ligne, par période
+
+---
+
+## 3. Diagrammes UML
+
+### 3.1 Diagramme de Cas d'Utilisation
+
+```mermaid
+flowchart TD
+    Etudiant((Étudiant))
+    Admin((Administrateur))
+    Responsable((Responsable\nTransport))
+    Chauffeur((Chauffeur))
+    Systeme((Système))
+
+    subgraph UC["Système de Gestion des Inscriptions Transport"]
+        UC1[S'authentifier]
+        UC2[S'inscrire au service transport]
+        UC3[Soumettre un dossier d'inscription]
+        UC4[Consulter le statut de sa demande]
+        UC5[Télécharger son badge]
+        UC6[Effectuer un paiement]
+        UC7[Consulter ses abonnements]
+
+        UC8[Gérer les inscriptions]
+        UC9[Valider / Rejeter un dossier]
+        UC10[Gérer les étudiants]
+        UC11[Générer des rapports]
+        UC12[Gérer les paiements]
+
+        UC13[Gérer les lignes de bus]
+        UC14[Gérer les arrêts]
+        UC15[Affecter bus et chauffeurs]
+        UC16[Gérer les horaires]
+
+        UC17[Consulter planning]
+        UC18[Consulter liste passagers]
+
+        UC19[Envoyer notifications]
+        UC20[Générer badges automatiquement]
+    end
+
+    Etudiant --> UC1
+    Etudiant --> UC2
+    Etudiant --> UC3
+    Etudiant --> UC4
+    Etudiant --> UC5
+    Etudiant --> UC6
+    Etudiant --> UC7
+
+    Admin --> UC1
+    Admin --> UC8
+    Admin --> UC9
+    Admin --> UC10
+    Admin --> UC11
+    Admin --> UC12
+
+    Responsable --> UC1
+    Responsable --> UC13
+    Responsable --> UC14
+    Responsable --> UC15
+    Responsable --> UC16
+
+    Chauffeur --> UC1
+    Chauffeur --> UC17
+    Chauffeur --> UC18
+
+    Systeme --> UC19
+    Systeme --> UC20
+```
+
+---
+
+### 3.2 Diagramme de Classes
+
+```mermaid
+classDiagram
+    class Utilisateur {
+        +int id
+        +string nom
+        +string prenom
+        +string email
+        +string motDePasse
+        +string role
+        +string telephone
+        +DateTime dateCreation
+        +seConnecter()
+        +seDeconnecter()
+        +reinitialiserMotDePasse()
+    }
+
+    class Etudiant {
+        +string numeroEtudiant
+        +string filiere
+        +int anneeEtude
+        +string photoURL
+        +string carteEtudianteURL
+        +getSesInscriptions()
+        +getBadge()
+    }
+
+    class Administrateur {
+        +validerInscription(inscriptionId)
+        +rejeterInscription(inscriptionId, motif)
+        +exporterRapport(format)
+    }
+
+    class ResponsableTransport {
+        +gererLigne(ligne)
+        +affecterBus(bus, ligne)
+        +affecterChauffeur(chauffeur, trajet)
+    }
+
+    class Chauffeur {
+        +string numeroPermis
+        +getPlanning()
+        +getListePassagers(trajetId)
+    }
+
+    class Inscription {
+        +int id
+        +DateTime dateInscription
+        +string statut
+        +string typeAbonnement
+        +DateTime dateDebut
+        +DateTime dateFin
+        +string motifRejet
+        +soumettre()
+        +annuler()
+        +renouveler()
+    }
+
+    class Ligne {
+        +int id
+        +string nom
+        +string description
+        +string pointDepart
+        +string pointArrivee
+        +boolean estActive
+        +getArrets()
+        +getTrajetsDuJour()
+    }
+
+    class Arret {
+        +int id
+        +string nom
+        +string adresse
+        +int ordre
+        +string coordonnees
+    }
+
+    class Bus {
+        +int id
+        +string immatriculation
+        +string marque
+        +int capacite
+        +string statut
+    }
+
+    class Trajet {
+        +int id
+        +DateTime heureDepart
+        +DateTime heureArrivee
+        +string joursSemaine
+        +int placesDisponibles
+        +reserverPlace()
+        +libererPlace()
+    }
+
+    class Paiement {
+        +int id
+        +double montant
+        +DateTime datePaiement
+        +string modePaiement
+        +string statut
+        +string referenceTransaction
+        +genererRecu()
+    }
+
+    class Badge {
+        +int id
+        +string codeQR
+        +DateTime dateExpiration
+        +boolean estValide
+        +genererPDF()
+        +verifier()
+    }
+
+    class Notification {
+        +int id
+        +string type
+        +string message
+        +DateTime dateEnvoi
+        +boolean estLue
+        +envoyer()
+    }
+
+    class Tarif {
+        +int id
+        +string typeAbonnement
+        +double montant
+        +string description
+        +calculerMontant()
+    }
+
+    Utilisateur <|-- Etudiant
+    Utilisateur <|-- Administrateur
+    Utilisateur <|-- ResponsableTransport
+    Utilisateur <|-- Chauffeur
+
+    Etudiant "1" --> "0..*" Inscription : soumet
+    Inscription "1" --> "1" Ligne : concerne
+    Inscription "1" --> "1" Arret : arrêt choisi
+    Inscription "1" --> "0..1" Paiement : génère
+    Inscription "1" --> "0..1" Badge : produit
+    Inscription "1" --> "1" Tarif : applique
+
+    Ligne "1" --> "1..*" Arret : comprend
+    Ligne "1" --> "0..*" Trajet : planifie
+    Trajet "1" --> "1" Bus : utilise
+    Trajet "1" --> "0..1" Chauffeur : conduit par
+
+    Utilisateur "1" --> "0..*" Notification : reçoit
+```
+
+---
+
+### 3.3 Diagramme de Séquence — Inscription d'un Étudiant
+
+```mermaid
+sequenceDiagram
+    actor Etudiant
+    participant Frontend
+    participant AuthService
+    participant InscriptionService
+    participant PaiementService
+    participant NotificationService
+    participant DB as Base de Données
+
+    Etudiant->>Frontend: Accède au formulaire d'inscription
+    Frontend->>AuthService: Vérifie authentification (JWT)
+    AuthService-->>Frontend: Token valide ✅
+
+    Etudiant->>Frontend: Remplit le formulaire (ligne, arrêt, type abonnement, documents)
+    Frontend->>InscriptionService: POST /inscriptions (données + fichiers)
+    InscriptionService->>DB: Vérifie places disponibles sur la ligne
+    DB-->>InscriptionService: Capacité OK
+
+    InscriptionService->>DB: Sauvegarde l'inscription (statut: EN_ATTENTE)
+    DB-->>InscriptionService: Inscription créée (id=42)
+    InscriptionService->>NotificationService: Envoie notification "Dossier reçu" à l'étudiant
+    NotificationService-->>Etudiant: Email "Votre dossier est en cours de traitement"
+    InscriptionService-->>Frontend: 201 Created {inscriptionId: 42}
+    Frontend-->>Etudiant: "Votre demande a été soumise avec succès"
+
+    Note over Frontend,DB: --- Traitement par l'Administrateur ---
+
+    actor Admin
+    Admin->>Frontend: Consulte la liste des dossiers en attente
+    Frontend->>InscriptionService: GET /inscriptions?statut=EN_ATTENTE
+    InscriptionService->>DB: Requête dossiers en attente
+    DB-->>InscriptionService: Liste des dossiers
+    InscriptionService-->>Frontend: Dossiers retournés
+
+    Admin->>Frontend: Valide l'inscription (id=42)
+    Frontend->>InscriptionService: PATCH /inscriptions/42 {statut: VALIDEE}
+    InscriptionService->>DB: Met à jour statut → VALIDEE
+    InscriptionService->>PaiementService: Calcule montant selon tarif
+    PaiementService-->>InscriptionService: Montant = 5000 DZD
+    InscriptionService->>NotificationService: Envoie notification "Inscription validée + montant à payer"
+    NotificationService-->>Etudiant: Email "Inscription validée — Paiement requis: 5000 DZD"
+
+    Etudiant->>Frontend: Effectue le paiement
+    Frontend->>PaiementService: POST /paiements {inscriptionId: 42, montant: 5000}
+    PaiementService->>DB: Enregistre le paiement
+    PaiementService->>InscriptionService: Génère le badge (QR Code)
+    InscriptionService->>DB: Sauvegarde le badge
+    InscriptionService->>NotificationService: Notifie "Badge disponible au téléchargement"
+    NotificationService-->>Etudiant: Email "Votre badge est prêt"
+    PaiementService-->>Frontend: Reçu + lien badge PDF
+    Frontend-->>Etudiant: Affiche reçu et bouton "Télécharger badge"
+```
+
+---
+
+## 4. Architecture Technique
+
+```mermaid
+graph TB
+    subgraph Client["🌐 Frontend (Navigateur)"]
+        UI[Interface HTML/CSS/JS\nou React/Vue.js]
+    end
+
+    subgraph Backend["⚙️ Backend (Serveur)"]
+        API[API REST\nNode.js/Express\nou Laravel/Django]
+        AUTH[Module Auth\nJWT]
+        NOTIF[Service Notifications\nNodemailer / SMTP]
+        PDF[Générateur PDF\nPuppeteer / FPDF]
+        QR[Générateur QR Code]
+    end
+
+    subgraph Data["🗄️ Données"]
+        DB[(Base de Données\nMySQL / PostgreSQL)]
+        STORAGE[Stockage Fichiers\nLocal / S3]
+    end
+
+    UI -->|HTTP/HTTPS| API
+    API --> AUTH
+    API --> NOTIF
+    API --> PDF
+    API --> QR
+    API --> DB
+    API --> STORAGE
+```
+
+---
+
+## 5. Répartition Détaillée des Tâches de Développement
+
+### 📁 PHASE 1 — Planification & Setup (Semaine 1-2)
+
+| ID | Tâche | Responsable | Durée |
+|----|-------|-------------|-------|
+| T01 | Rédaction finale du cahier des charges | Chef de projet | 2j |
+| T02 | Modélisation de la base de données (MCD → MLD) | Dev Backend | 2j |
+| T03 | Création du dépôt Git et structure du projet | DevOps | 1j |
+| T04 | Configuration de l'environnement de développement | Tous | 1j |
+| T05 | Choix et installation du Stack technique | Équipe | 1j |
+| T06 | Maquettage UI/UX (wireframes) des pages principales | Dev Frontend | 3j |
+
+---
+
+### 📁 PHASE 2 — Backend : Base de données & API (Semaine 3-5)
+
+#### 2.1 Base de Données
+
+| ID | Tâche | Durée |
+|----|-------|-------|
+| T07 | Création des tables : `utilisateurs`, `etudiants`, `admins` | 1j |
+| T08 | Création des tables : `lignes`, `arrets`, `bus`, `trajets` | 1j |
+| T09 | Création des tables : `inscriptions`, `paiements`, `badges` | 1j |
+| T10 | Création des tables : `tarifs`, `notifications` | 0.5j |
+| T11 | Création des seeds / données de test | 1j |
+| T12 | Mise en place des migrations | 0.5j |
+
+#### 2.2 API REST — Authentification
+
+| ID | Endpoint | Méthode | Durée |
+|----|----------|---------|-------|
+| T13 | `POST /auth/register` | Inscription utilisateur | 1j |
+| T14 | `POST /auth/login` | Connexion + génération JWT | 1j |
+| T15 | `POST /auth/logout` | Déconnexion | 0.5j |
+| T16 | `POST /auth/forgot-password` | Envoi email reset | 1j |
+| T17 | `POST /auth/reset-password` | Réinitialisation MDP | 0.5j |
+| T18 | Middleware de vérification des rôles (RBAC) | — | 1j |
+
+#### 2.3 API REST — Inscriptions
+
+| ID | Endpoint | Méthode | Durée |
+|----|----------|---------|-------|
+| T19 | `POST /inscriptions` | Soumettre une inscription | 1j |
+| T20 | `GET /inscriptions/:id` | Voir une inscription | 0.5j |
+| T21 | `GET /inscriptions` | Liste (admin, filtres, pagination) | 1j |
+| T22 | `PATCH /inscriptions/:id` | Valider / Rejeter | 1j |
+| T23 | `DELETE /inscriptions/:id` | Supprimer | 0.5j |
+| T24 | Upload de fichiers (photo, carte étudiant) | Multer/FormData | 1j |
+
+#### 2.4 API REST — Lignes, Bus, Trajets
+
+| ID | Endpoint | Méthode | Durée |
+|----|----------|---------|-------|
+| T25 | CRUD `/lignes` | Gestion des lignes | 1j |
+| T26 | CRUD `/arrets` | Gestion des arrêts | 0.5j |
+| T27 | CRUD `/bus` | Gestion des bus | 0.5j |
+| T28 | CRUD `/trajets` | Gestion des trajets | 1j |
+| T29 | `GET /lignes/:id/places-disponibles` | Vérification capacité | 0.5j |
+
+#### 2.5 API REST — Paiements & Badges
+
+| ID | Endpoint | Méthode | Durée |
+|----|----------|---------|-------|
+| T30 | `POST /paiements` | Enregistrer un paiement | 1j |
+| T31 | `GET /paiements/:id/recu` | Générer reçu PDF | 1j |
+| T32 | `POST /badges/generate/:inscriptionId` | Générer badge + QR Code | 1.5j |
+| T33 | `GET /badges/:id/download` | Télécharger badge PDF | 1j |
+| T34 | `GET /badges/verify/:qrCode` | Vérifier validité badge | 0.5j |
+
+#### 2.6 API — Notifications & Rapports
+
+| ID | Tâche | Durée |
+|----|-------|-------|
+| T35 | Service d'envoi d'emails (SMTP / NodeMailer) | 1j |
+| T36 | Triggers automatiques (validation, expiration) | 1j |
+| T37 | `GET /rapports/inscriptions` | Statistiques globales | 1j |
+| T38 | `GET /rapports/export` | Export Excel / PDF | 1.5j |
+
+---
+
+### 📁 PHASE 3 — Frontend (Semaine 5-8)
+
+#### 3.1 Pages Communes
+
+| ID | Page / Composant | Durée |
+|----|-----------------|-------|
+| T39 | Page d'accueil (landing page) | 1j |
+| T40 | Page Connexion | 0.5j |
+| T41 | Page Inscription (création de compte) | 1j |
+| T42 | Page "Mot de passe oublié" | 0.5j |
+| T43 | Composant Navbar / Sidebar | 1j |
+| T44 | Composant Footer | 0.5j |
+
+#### 3.2 Espace Étudiant
+
+| ID | Page / Composant | Durée |
+|----|-----------------|-------|
+| T45 | Tableau de bord étudiant | 1j |
+| T46 | Formulaire d'inscription au transport | 2j |
+| T47 | Page suivi de demande (timeline statut) | 1j |
+| T48 | Page "Mes abonnements" | 1j |
+| T49 | Page téléchargement badge / QR Code | 1j |
+| T50 | Page historique paiements | 0.5j |
+| T51 | Page profil étudiant (modification infos) | 1j |
+
+#### 3.3 Espace Administrateur
+
+| ID | Page / Composant | Durée |
+|----|-----------------|-------|
+| T52 | Tableau de bord admin (KPIs, graphiques) | 2j |
+| T53 | Page liste des inscriptions + filtres | 1.5j |
+| T54 | Page détail d'une inscription (validation) | 1j |
+| T55 | Page gestion des étudiants | 1j |
+| T56 | Page gestion des paiements | 1j |
+| T57 | Page rapports et exportations | 1.5j |
+
+#### 3.4 Espace Responsable Transport
+
+| ID | Page / Composant | Durée |
+|----|-----------------|-------|
+| T58 | Gestion des lignes (CRUD UI) | 1.5j |
+| T59 | Gestion des arrêts (CRUD UI) | 1j |
+| T60 | Gestion des bus (CRUD UI) | 1j |
+| T61 | Gestion des trajets et planning | 1.5j |
+| T62 | Affectation chauffeurs | 1j |
+
+#### 3.5 Espace Chauffeur
+
+| ID | Page / Composant | Durée |
+|----|-----------------|-------|
+| T63 | Tableau de bord chauffeur | 0.5j |
+| T64 | Page planning (trajets du jour / semaine) | 1j |
+| T65 | Page liste passagers par trajet | 1j |
+
+---
+
+### 📁 PHASE 4 — Tests & Intégration (Semaine 9-10)
+
+| ID | Tâche | Durée |
+|----|-------|-------|
+| T66 | Tests unitaires API (Jest / PHPUnit) | 3j |
+| T67 | Tests d'intégration (Postman / Insomnia) | 2j |
+| T68 | Tests fonctionnels Frontend (Cypress / manuel) | 2j |
+| T69 | Tests de charge (k6 / JMeter) | 1j |
+| T70 | Correction des bugs | 2j |
+
+---
+
+### 📁 PHASE 5 — Déploiement & Livraison (Semaine 11-12)
+
+| ID | Tâche | Durée |
+|----|-------|-------|
+| T71 | Configuration du serveur (Linux + Nginx) | 1j |
+| T72 | Mise en place CI/CD (GitHub Actions) | 1j |
+| T73 | Déploiement en production | 1j |
+| T74 | Rédaction de la documentation technique | 2j |
+| T75 | Rédaction du manuel utilisateur | 2j |
+| T76 | Formation des utilisateurs finaux | 1j |
+| T77 | Recette finale et validation client | 2j |
+
+---
+
+## 6. Estimation Globale
+
+| Phase | Durée Estimée |
+|-------|---------------|
+| Phase 1 — Planification & Setup | 2 semaines |
+| Phase 2 — Backend & API | 3 semaines |
+| Phase 3 — Frontend | 4 semaines |
+| Phase 4 — Tests | 2 semaines |
+| Phase 5 — Déploiement | 1 semaine |
+| **TOTAL** | **≈ 12 semaines** |
+
+---
+
+## 7. Stack Technique Recommandé
+
+| Couche | Technologies |
+|--------|-------------|
+| **Frontend** | HTML5 / CSS3 / JavaScript — React.js ou Vue.js |
+| **Backend** | Node.js + Express.js **ou** PHP + Laravel |
+| **Base de données** | MySQL ou PostgreSQL |
+| **Auth** | JWT (JSON Web Tokens) |
+| **PDF** | Puppeteer (Node) ou FPDF (PHP) |
+| **QR Code** | `qrcode` (npm) ou `endroid/qr-code` (PHP) |
+| **Email** | Nodemailer + SMTP ou PHPMailer |
+| **Tests** | Jest + Supertest (Node) / PHPUnit (PHP) / Cypress (E2E) |
+| **Versioning** | Git + GitHub / GitLab |
+| **Déploiement** | VPS Linux + Nginx + PM2 / Docker |
+
+---
+
+*Document généré le 12 Mai 2026 — Projet : Gestion des Inscriptions au Service de Transport Universitaire*

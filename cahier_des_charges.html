@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Cahier des Charges – Gestion Inscriptions Transport Étudiant</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad:true,theme:'base',themeVariables:{primaryColor:'#0f3460',primaryTextColor:'#fff',primaryBorderColor:'#e94560',lineColor:'#e94560',secondaryColor:'#16213e',tertiaryColor:'#f4f7fb',fontFamily:'Inter,sans-serif'}});</script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;font-size:11pt;color:#1a1a2e;background:#fff;line-height:1.7}
+
+  /* ── COVER PAGE ── */
+  .cover{width:100%;min-height:100vh;background:linear-gradient(135deg,#0f3460 0%,#16213e 50%,#1a1a2e 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 40px;page-break-after:always;text-align:center}
+  .cover-logo{width:80px;height:80px;background:linear-gradient(135deg,#e94560,#0f3460);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 30px;font-size:36px}
+  .cover h1{font-family:'Playfair Display',serif;font-size:28pt;color:#fff;margin-bottom:12px;line-height:1.3}
+  .cover h2{font-size:14pt;color:#e94560;font-weight:600;margin-bottom:40px;letter-spacing:1px}
+  .cover-meta{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:28px 40px;margin-top:20px;color:#cdd}
+  .cover-meta table{border-collapse:collapse;width:100%}
+  .cover-meta td{padding:6px 16px;font-size:10.5pt}
+  .cover-meta td:first-child{color:#e94560;font-weight:600;text-align:right;border-right:2px solid rgba(233,69,96,0.4)}
+  .cover-meta td:last-child{text-align:left;color:#dde}
+  .cover-badge{margin-top:30px;background:#e94560;color:#fff;padding:8px 28px;border-radius:20px;font-size:9pt;font-weight:600;letter-spacing:2px;text-transform:uppercase}
+
+  /* ── GENERAL LAYOUT ── */
+  .page{padding:50px 60px;max-width:900px;margin:0 auto}
+  @media print{.page{padding:30px 40px}.cover{min-height:auto;padding:60px 40px}.no-print{display:none}}
+
+  /* ── HEADERS ── */
+  .section-title{font-family:'Playfair Display',serif;font-size:20pt;color:#0f3460;border-bottom:3px solid #e94560;padding-bottom:8px;margin:40px 0 20px}
+  .sub-title{font-size:13pt;font-weight:700;color:#0f3460;margin:28px 0 12px;padding-left:12px;border-left:4px solid #e94560}
+  .sub-sub{font-size:11pt;font-weight:600;color:#333;margin:18px 0 8px}
+
+  /* ── TABLES ── */
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:10pt}
+  thead tr{background:linear-gradient(90deg,#0f3460,#16213e);color:#fff}
+  thead th{padding:10px 14px;text-align:left;font-weight:600}
+  tbody tr:nth-child(even){background:#f4f7fb}
+  tbody td{padding:9px 14px;border-bottom:1px solid #e0e6f0}
+  tbody tr:hover{background:#e8eef8}
+
+  /* ── BADGES / PILLS ── */
+  .pill{display:inline-block;padding:2px 10px;border-radius:20px;font-size:9pt;font-weight:600}
+  .pill-red{background:#fde8ec;color:#c0392b}
+  .pill-green{background:#e8f8f0;color:#27ae60}
+  .pill-blue{background:#e8f0fe;color:#1a5fae}
+  .pill-orange{background:#fff3e0;color:#e67e22}
+
+  /* ── BOXES ── */
+  .box{border-radius:10px;padding:18px 22px;margin:16px 0}
+  .box-info{background:#eef4ff;border-left:5px solid #3498db}
+  .box-warn{background:#fff8e1;border-left:5px solid #f39c12}
+  .box-danger{background:#fdecea;border-left:5px solid #e74c3c}
+  .box-success{background:#eafaf1;border-left:5px solid #2ecc71}
+  .box-title{font-weight:700;margin-bottom:6px}
+
+  /* ── LISTS ── */
+  ul{margin:8px 0 8px 22px}
+  ul li{margin-bottom:5px}
+  ul li::marker{color:#e94560}
+
+  /* ── UC MATRIX ── */
+  .uc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+  .uc-card{background:#f7f9fc;border:1px solid #dde4f0;border-radius:8px;padding:14px 16px}
+  .uc-card h4{color:#0f3460;font-size:10.5pt;margin-bottom:8px;border-bottom:1px solid #dde4f0;padding-bottom:6px}
+  .uc-card ul{margin-left:16px}
+  .uc-card li{font-size:9.5pt;margin-bottom:3px}
+
+  /* ── PRINT BUTTON ── */
+  .print-btn{position:fixed;bottom:30px;right:30px;background:#e94560;color:#fff;border:none;padding:14px 22px;border-radius:50px;font-size:11pt;font-weight:700;cursor:pointer;box-shadow:0 6px 24px rgba(233,69,96,0.4);z-index:9999;transition:.3s}
+  .print-btn:hover{background:#c0392b;transform:translateY(-2px)}
+
+  /* ── TOC ── */
+  .toc{background:#f7f9fc;border:1px solid #dde4f0;border-radius:10px;padding:24px 30px;margin:20px 0}
+  .toc h3{color:#0f3460;margin-bottom:14px;font-size:13pt}
+  .toc ol{margin-left:20px}
+  .toc li{margin-bottom:6px;color:#1a5fae;font-size:10.5pt}
+  .toc li span{float:right;color:#666}
+</style>
+</head>
+<body>
+
+<!-- BOUTON IMPRESSION -->
+<button class="print-btn no-print" onclick="window.print()">🖨️ Imprimer / PDF</button>
+
+<!-- ══════════════════════════════════════════
+     PAGE DE COUVERTURE
+══════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-logo">🚌</div>
+  <h1>Application Web de Gestion des Inscriptions<br/>des Étudiants au Service de Transport</h1>
+  <h2>CAHIER DES CHARGES DÉTAILLÉ</h2>
+  <div class="cover-meta">
+    <table>
+      <tr><td>Établissement</td><td>[Nom de l'Université]</td></tr>
+      <tr><td>Projet</td><td>TransportEtud — Système d'inscription en ligne</td></tr>
+      <tr><td>Version</td><td>1.0</td></tr>
+      <tr><td>Date</td><td>12 Mai 2026</td></tr>
+      <tr><td>Stack</td><td>Java Spring Boot · React.js · MySQL</td></tr>
+      <tr><td>Statut</td><td>En cours de rédaction</td></tr>
+    </table>
+  </div>
+  <div class="cover-badge">Confidentiel — Usage Interne</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     CONTENU
+══════════════════════════════════════════ -->
+<div class="page">
+
+<!-- TABLE DES MATIÈRES -->
+<div class="toc">
+  <h3>📋 Table des Matières</h3>
+  <ol>
+    <li>Présentation Générale <span>§1</span></li>
+    <li>Contexte et Problématique <span>§2</span></li>
+    <li>Objectifs du Projet <span>§3</span></li>
+    <li>Périmètre et Limites <span>§4</span></li>
+    <li>Acteurs du Système <span>§5</span></li>
+    <li>Exigences Fonctionnelles <span>§6</span></li>
+    <li>Exigences Non Fonctionnelles <span>§7</span></li>
+    <li>Architecture Technique <span>§8</span></li>
+    <li>Modèle de Données <span>§9</span></li>
+    <li>Interfaces Utilisateur <span>§10</span></li>
+    <li>Sécurité <span>§11</span></li>
+    <li>Contraintes et Risques <span>§12</span></li>
+    <li>Planning Prévisionnel <span>§13</span></li>
+    <li>Validation et Recette <span>§14</span></li>
+  </ol>
+</div>
+
+<!-- §1 -->
+<h2 class="section-title">§1 — Présentation Générale</h2>
+<p>Le présent document constitue le <strong>cahier des charges complet</strong> de l'application web de gestion des inscriptions des étudiants au service de transport universitaire. Il définit les exigences fonctionnelles et non fonctionnelles, les contraintes techniques, le périmètre du projet, ainsi que les modalités de livraison et de validation.</p>
+
+<div class="box box-info">
+  <div class="box-title">📌 Titre du Projet</div>
+  Étude et mise en place d'une application web de gestion des inscriptions des étudiants au service de transport — <strong>TransportEtud v1.0</strong>
+</div>
+
+<h3 class="sub-title">1.1 Identification du Maître d'Ouvrage</h3>
+<table>
+  <thead><tr><th>Champ</th><th>Information</th></tr></thead>
+  <tbody>
+    <tr><td>Maître d'ouvrage</td><td>[Université / École]</td></tr>
+    <tr><td>Service demandeur</td><td>Service de Transport Universitaire</td></tr>
+    <tr><td>Interlocuteur principal</td><td>[Nom du responsable]</td></tr>
+    <tr><td>Contact</td><td>[Email / Tél]</td></tr>
+  </tbody>
+</table>
+
+<!-- §2 -->
+<h2 class="section-title">§2 — Contexte et Problématique</h2>
+<p>L'université dispose d'un service de transport reliant plusieurs campus et résidences. Actuellement, les inscriptions sont gérées manuellement (formulaires papier, tableaux Excel) par le personnel administratif, ce qui génère de nombreuses difficultés :</p>
+<ul>
+  <li>Perte et duplication des dossiers papier</li>
+  <li>Aucun suivi en temps réel de l'état des demandes</li>
+  <li>Dépassements de capacité non détectés à temps</li>
+  <li>Impossibilité de générer des statistiques fiables</li>
+  <li>Délais de traitement longs (3 à 5 jours ouvrables)</li>
+  <li>Absence de notifications pour les étudiants</li>
+</ul>
+
+<div class="box box-warn">
+  <div class="box-title">⚠️ Problème Principal</div>
+  L'absence d'un système centralisé entraîne une gestion inefficace, des erreurs fréquentes et une insatisfaction des étudiants et du personnel administratif.
+</div>
+
+<!-- §3 -->
+<h2 class="section-title">§3 — Objectifs du Projet</h2>
+<table>
+  <thead><tr><th>#</th><th>Objectif</th><th>Priorité</th></tr></thead>
+  <tbody>
+    <tr><td>O1</td><td>Digitaliser le processus d'inscription au service de transport</td><td><span class="pill pill-red">Critique</span></td></tr>
+    <tr><td>O2</td><td>Permettre la gestion et validation des dossiers en ligne</td><td><span class="pill pill-red">Critique</span></td></tr>
+    <tr><td>O3</td><td>Assurer le suivi en temps réel des demandes</td><td><span class="pill pill-red">Critique</span></td></tr>
+    <tr><td>O4</td><td>Gérer les lignes, bus, arrêts et horaires</td><td><span class="pill pill-orange">Haute</span></td></tr>
+    <tr><td>O5</td><td>Automatiser les paiements et générer des reçus PDF</td><td><span class="pill pill-orange">Haute</span></td></tr>
+    <tr><td>O6</td><td>Générer et distribuer les badges / cartes de transport (QR Code)</td><td><span class="pill pill-orange">Haute</span></td></tr>
+    <tr><td>O7</td><td>Envoyer des notifications par email aux utilisateurs</td><td><span class="pill pill-blue">Moyenne</span></td></tr>
+    <tr><td>O8</td><td>Produire des rapports et statistiques d'utilisation</td><td><span class="pill pill-blue">Moyenne</span></td></tr>
+    <tr><td>O9</td><td>Exporter les données en Excel / PDF</td><td><span class="pill pill-green">Faible</span></td></tr>
+  </tbody>
+</table>
+
+<!-- §4 -->
+<h2 class="section-title">§4 — Périmètre et Limites</h2>
+<h3 class="sub-title">4.1 Ce qui est INCLUS</h3>
+<ul>
+  <li>Application web responsive (desktop + mobile)</li>
+  <li>Portail étudiant : inscription, suivi, paiement, badge, profil</li>
+  <li>Portail administrateur : validation, gestion, rapports</li>
+  <li>Portail responsable transport : lignes, bus, trajets, chauffeurs</li>
+  <li>Portail chauffeur : planning, liste passagers</li>
+  <li>Système de notification par email</li>
+  <li>Génération PDF (reçus, badges)</li>
+</ul>
+<h3 class="sub-title">4.2 Ce qui est EXCLU</h3>
+<ul>
+  <li>Application mobile native (iOS / Android)</li>
+  <li>Géolocalisation et suivi GPS des bus en temps réel</li>
+  <li>Paiement en ligne via passerelle bancaire (prévu v2)</li>
+  <li>Intégration avec le SI de l'université (provisoire)</li>
+</ul>
+
+<!-- §5 -->
+<h2 class="section-title">§5 — Acteurs du Système</h2>
+<table>
+  <thead><tr><th>Acteur</th><th>Description</th><th>Droits</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Étudiant</strong></td><td>Demande et utilise le service de transport</td><td>Inscription, suivi, paiement, badge</td></tr>
+    <tr><td><strong>Administrateur</strong></td><td>Gère les dossiers et la plateforme</td><td>Validation, gestion, rapports, export</td></tr>
+    <tr><td><strong>Responsable Transport</strong></td><td>Supervise les lignes et ressources</td><td>Lignes, bus, arrêts, trajets, chauffeurs</td></tr>
+    <tr><td><strong>Chauffeur</strong></td><td>Conduit les bus</td><td>Planning, liste passagers (lecture seule)</td></tr>
+    <tr><td><strong>Système</strong></td><td>Agent automatique</td><td>Notifications, rappels, génération badges</td></tr>
+  </tbody>
+</table>
+
+<!-- §6 -->
+<h2 class="section-title">§6 — Exigences Fonctionnelles</h2>
+
+<h3 class="sub-title">6.1 Module Authentification</h3>
+<table>
+  <thead><tr><th>ID</th><th>Fonctionnalité</th><th>Acteur</th></tr></thead>
+  <tbody>
+    <tr><td>F-01</td><td>Création de compte (nom, prénom, email, N° étudiant, filière)</td><td>Étudiant</td></tr>
+    <tr><td>F-02</td><td>Connexion sécurisée avec JWT</td><td>Tous</td></tr>
+    <tr><td>F-03</td><td>Déconnexion et invalidation du token</td><td>Tous</td></tr>
+    <tr><td>F-04</td><td>Récupération de mot de passe par email (token temporaire)</td><td>Tous</td></tr>
+    <tr><td>F-05</td><td>Gestion des rôles et accès différenciés par profil</td><td>Admin</td></tr>
+    <tr><td>F-06</td><td>Tableau de bord personnalisé selon le rôle</td><td>Tous</td></tr>
+  </tbody>
+</table>
+
+<h3 class="sub-title">6.2 Module Inscription au Transport</h3>
+<table>
+  <thead><tr><th>ID</th><th>Fonctionnalité</th><th>Acteur</th></tr></thead>
+  <tbody>
+    <tr><td>F-10</td><td>Formulaire d'inscription : choix ligne, arrêt, type abonnement</td><td>Étudiant</td></tr>
+    <tr><td>F-11</td><td>Upload de documents (photo d'identité, carte étudiante)</td><td>Étudiant</td></tr>
+    <tr><td>F-12</td><td>Vérification de la disponibilité de places avant soumission</td><td>Système</td></tr>
+    <tr><td>F-13</td><td>Suivi du statut : EN_ATTENTE / VALIDEE / REJETEE / EXPIREE</td><td>Étudiant</td></tr>
+    <tr><td>F-14</td><td>Renouvellement d'abonnement en fin de période</td><td>Étudiant</td></tr>
+    <tr><td>F-15</td><td>Annulation d'une inscription en attente</td><td>Étudiant</td></tr>
+    <tr><td>F-16</td><td>Historique complet des inscriptions passées</td><td>Étudiant</td></tr>
+    <tr><td>F-17</td><td>Validation ou rejet de dossier avec motif</td><td>Admin</td></tr>
+    <tr><td>F-18</td><td>Liste filtrée et paginée des dossiers (statut, ligne, date)</td><td>Admin</td></tr>
+  </tbody>
+</table>
+
+<h3 class="sub-title">6.3 Module Gestion des Lignes & Ressources</h3>
+<table>
+  <thead><tr><th>ID</th><th>Fonctionnalité</th><th>Acteur</th></tr></thead>
+  <tbody>
+    <tr><td>F-20</td><td>CRUD des lignes (nom, départ, arrivée, description)</td><td>Responsable</td></tr>
+    <tr><td>F-21</td><td>CRUD des arrêts (nom, adresse, ordre sur la ligne)</td><td>Responsable</td></tr>
+    <tr><td>F-22</td><td>CRUD des bus (immatriculation, marque, capacité)</td><td>Responsable</td></tr>
+    <tr><td>F-23</td><td>Création des trajets (jour, heure départ/arrivée, ligne, bus)</td><td>Responsable</td></tr>
+    <tr><td>F-24</td><td>Affectation des chauffeurs aux trajets</td><td>Responsable</td></tr>
+    <tr><td>F-25</td><td>Gestion de la capacité disponible par trajet</td><td>Système</td></tr>
+  </tbody>
+</table>
+
+<h3 class="sub-title">6.4 Module Paiement</h3>
+<table>
+  <thead><tr><th>ID</th><th>Fonctionnalité</th><th>Acteur</th></tr></thead>
+  <tbody>
+    <tr><td>F-30</td><td>Tarification automatique selon type d'abonnement</td><td>Système</td></tr>
+    <tr><td>F-31</td><td>Enregistrement du paiement (espèces / virement)</td><td>Admin</td></tr>
+    <tr><td>F-32</td><td>Génération d'un reçu PDF téléchargeable</td><td>Système</td></tr>
+    <tr><td>F-33</td><td>Historique des paiements par étudiant</td><td>Étudiant / Admin</td></tr>
+    <tr><td>F-34</td><td>Tableau de bord des revenus (mensuel / annuel)</td><td>Admin</td></tr>
+  </tbody>
+</table>
+
+<h3 class="sub-title">6.5 Module Badge / QR Code</h3>
+<table>
+  <thead><tr><th>ID</th><th>Fonctionnalité</th><th>Acteur</th></tr></thead>
+  <tbody>
+    <tr><td>F-40</td><td>Génération automatique d'un QR Code unique après validation + paiement</td><td>Système</td></tr>
+    <tr><td>F-41</td><td>Badge PDF avec photo, nom, ligne, validité, QR Code</td><td>Système</td></tr>
+    <tr><td>F-42</td><td>Téléchargement du badge depuis l'espace étudiant</td><td>Étudiant</td></tr>
+    <tr><td>F-43</td><td>Vérification de la validité d'un badge via QR Code</td><td>Chauffeur / Admin</td></tr>
+    <tr><td>F-44</td><td>Renouvellement du badge lors du renouvellement d'inscription</td><td>Système</td></tr>
+  </tbody>
+</table>
+
+<h3 class="sub-title">6.6 Module Notifications</h3>
+<table>
+  <thead><tr><th>ID</th><th>Déclencheur</th><th>Destinataire</th></tr></thead>
+  <tbody>
+    <tr><td>F-50</td><td>Dossier soumis → confirmation de réception</td><td>Étudiant</td></tr>
+    <tr><td>F-51</td><td>Dossier validé → information + montant à payer</td><td>Étudiant</td></tr>
+    <tr><td>F-52</td><td>Dossier rejeté → notification + motif</td><td>Étudiant</td></tr>
+    <tr><td>F-53</td><td>Paiement enregistré → reçu + lien badge</td><td>Étudiant</td></tr>
+    <tr><td>F-54</td><td>Nouveau dossier soumis</td><td>Administrateur</td></tr>
+    <tr><td>F-55</td><td>Expiration abonnement (J-7 et J-1)</td><td>Étudiant</td></tr>
+    <tr><td>F-56</td><td>Changement de ligne ou d'horaire</td><td>Étudiants concernés</td></tr>
+  </tbody>
+</table>
+
+<h3 class="sub-title">6.7 Module Rapports & Administration</h3>
+<table>
+  <thead><tr><th>ID</th><th>Fonctionnalité</th><th>Acteur</th></tr></thead>
+  <tbody>
+    <tr><td>F-60</td><td>Tableau de bord KPIs (inscrits, taux remplissage, revenus)</td><td>Admin</td></tr>
+    <tr><td>F-61</td><td>Rapports par ligne, par période, par type d'abonnement</td><td>Admin</td></tr>
+    <tr><td>F-62</td><td>Export des données en Excel (Apache POI)</td><td>Admin</td></tr>
+    <tr><td>F-63</td><td>Export des rapports en PDF</td><td>Admin</td></tr>
+    <tr><td>F-64</td><td>Gestion des comptes utilisateurs (activer, désactiver)</td><td>Admin</td></tr>
+  </tbody>
+</table>
+
+<!-- §7 -->
+<h2 class="section-title">§7 — Exigences Non Fonctionnelles</h2>
+<table>
+  <thead><tr><th>Catégorie</th><th>Exigence</th><th>Mesure</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Performance</strong></td><td>Temps de réponse API</td><td>&lt; 2 secondes (95e percentile)</td></tr>
+    <tr><td><strong>Performance</strong></td><td>Chargement page React</td><td>&lt; 3 secondes</td></tr>
+    <tr><td><strong>Disponibilité</strong></td><td>Uptime du serveur</td><td>≥ 99 % (hors maintenance)</td></tr>
+    <tr><td><strong>Sécurité</strong></td><td>Authentification</td><td>JWT HS256, expiration 24h</td></tr>
+    <tr><td><strong>Sécurité</strong></td><td>Protocole</td><td>HTTPS obligatoire en production</td></tr>
+    <tr><td><strong>Sécurité</strong></td><td>Mots de passe</td><td>BCrypt (facteur 12)</td></tr>
+    <tr><td><strong>Sécurité</strong></td><td>Inputs</td><td>Validation côté serveur (@Valid, contraintes JPA)</td></tr>
+    <tr><td><strong>Scalabilité</strong></td><td>Utilisateurs simultanés</td><td>Support de 500 sessions concurrentes</td></tr>
+    <tr><td><strong>Maintenabilité</strong></td><td>Documentation API</td><td>Swagger / SpringDoc OpenAPI 3</td></tr>
+    <tr><td><strong>Portabilité</strong></td><td>Compatibilité navigateurs</td><td>Chrome, Firefox, Edge (2 dernières versions)</td></tr>
+    <tr><td><strong>Accessibilité</strong></td><td>Design responsive</td><td>Mobile-first, breakpoints 768px / 1024px</td></tr>
+  </tbody>
+</table>
+
+<!-- §8 -->
+<h2 class="section-title">§8 — Architecture Technique</h2>
+<h3 class="sub-title">8.1 Stack Technologique</h3>
+<table>
+  <thead><tr><th>Couche</th><th>Technologie</th><th>Version</th></tr></thead>
+  <tbody>
+    <tr><td>Frontend</td><td>React.js + Vite + React Router v6 + Axios + Redux Toolkit</td><td>React 18+</td></tr>
+    <tr><td>UI Lib</td><td>Material UI ou Ant Design + CSS Modules</td><td>MUI v5</td></tr>
+    <tr><td>Backend</td><td>Java + Spring Boot (Web, Security, Data JPA, Mail, Validation)</td><td>Java 17 / Spring Boot 3.x</td></tr>
+    <tr><td>Auth</td><td>Spring Security 6 + JJWT</td><td>0.12+</td></tr>
+    <tr><td>ORM</td><td>Spring Data JPA + Hibernate</td><td>6.x</td></tr>
+    <tr><td>Base de données</td><td>MySQL</td><td>8.0+</td></tr>
+    <tr><td>Migration DB</td><td>Flyway</td><td>9+</td></tr>
+    <tr><td>PDF</td><td>iText 7 ou Apache PDFBox</td><td>7.x</td></tr>
+    <tr><td>QR Code</td><td>ZXing (core + javase)</td><td>3.5+</td></tr>
+    <tr><td>Email</td><td>JavaMailSender + Thymeleaf (templates HTML)</td><td>—</td></tr>
+    <tr><td>Excel</td><td>Apache POI</td><td>5.x</td></tr>
+    <tr><td>Documentation API</td><td>SpringDoc OpenAPI 3 (Swagger UI)</td><td>2.x</td></tr>
+    <tr><td>Build</td><td>Maven (backend) · Vite / npm (frontend)</td><td>—</td></tr>
+    <tr><td>Serveur</td><td>Linux Ubuntu + Nginx (reverse proxy)</td><td>—</td></tr>
+    <tr><td>CI/CD</td><td>GitHub Actions</td><td>—</td></tr>
+    <tr><td>Conteneurisation</td><td>Docker + Docker Compose (optionnel)</td><td>—</td></tr>
+  </tbody>
+</table>
+
+<h3 class="sub-title">8.2 Structure du Projet Spring Boot</h3>
+<table>
+  <thead><tr><th>Package</th><th>Rôle</th></tr></thead>
+  <tbody>
+    <tr><td><code>controller/</code></td><td>@RestController — points d'entrée HTTP</td></tr>
+    <tr><td><code>service/</code></td><td>@Service — logique métier</td></tr>
+    <tr><td><code>repository/</code></td><td>@Repository — accès base de données (JPA)</td></tr>
+    <tr><td><code>model/</code></td><td>@Entity — entités JPA</td></tr>
+    <tr><td><code>dto/</code></td><td>Data Transfer Objects (requêtes / réponses)</td></tr>
+    <tr><td><code>security/</code></td><td>JWT filter, SecurityConfig, UserDetailsService</td></tr>
+    <tr><td><code>exception/</code></td><td>@ControllerAdvice — gestion globale des erreurs</td></tr>
+    <tr><td><code>util/</code></td><td>Génération PDF, QR Code, Email</td></tr>
+    <tr><td><code>config/</code></td><td>CORS, Mail, Upload, Swagger</td></tr>
+  </tbody>
+</table>
+
+<!-- §9 -->
+<h2 class="section-title">§9 — Modèle de Données Principal</h2>
+<table>
+  <thead><tr><th>Table</th><th>Colonnes Principales</th><th>Relations</th></tr></thead>
+  <tbody>
+    <tr><td><strong>utilisateurs</strong></td><td>id, nom, prenom, email, mot_de_passe, role, tel, actif</td><td>Base de toutes les entités</td></tr>
+    <tr><td><strong>etudiants</strong></td><td>id (FK utilisateur), numero_etudiant, filiere, annee, photo_url, carte_url</td><td>1 étudiant → N inscriptions</td></tr>
+    <tr><td><strong>lignes</strong></td><td>id, nom, depart, arrivee, description, actif</td><td>1 ligne → N arrêts, N trajets</td></tr>
+    <tr><td><strong>arrets</strong></td><td>id, nom, adresse, ordre, ligne_id</td><td>N arrêts → 1 ligne</td></tr>
+    <tr><td><strong>bus</strong></td><td>id, immatriculation, marque, capacite, statut</td><td>1 bus → N trajets</td></tr>
+    <tr><td><strong>trajets</strong></td><td>id, heure_depart, heure_arrivee, jours, places_dispo, ligne_id, bus_id, chauffeur_id</td><td>N trajets → 1 ligne</td></tr>
+    <tr><td><strong>inscriptions</strong></td><td>id, date, statut, type_abonnement, date_debut, date_fin, motif_rejet, etudiant_id, ligne_id, arret_id</td><td>Entité centrale</td></tr>
+    <tr><td><strong>tarifs</strong></td><td>id, type_abonnement, montant, description</td><td>1 tarif → N inscriptions</td></tr>
+    <tr><td><strong>paiements</strong></td><td>id, montant, date_paiement, mode, statut, reference, inscription_id</td><td>1 paiement → 1 inscription</td></tr>
+    <tr><td><strong>badges</strong></td><td>id, code_qr, date_expiration, valide, inscription_id</td><td>1 badge → 1 inscription</td></tr>
+    <tr><td><strong>notifications</strong></td><td>id, type, message, date_envoi, lu, utilisateur_id</td><td>N notifications → 1 utilisateur</td></tr>
+  </tbody>
+</table>
+
+<!-- §10 -->
+<h2 class="section-title">§10 — Interfaces Utilisateur (Écrans principaux)</h2>
+<div class="uc-grid">
+  <div class="uc-card">
+    <h4>🎓 Espace Étudiant</h4>
+    <ul>
+      <li>Page d'accueil / Landing</li>
+      <li>Connexion / Inscription</li>
+      <li>Tableau de bord étudiant</li>
+      <li>Formulaire inscription transport</li>
+      <li>Suivi de demande (timeline)</li>
+      <li>Mes abonnements</li>
+      <li>Paiement &amp; reçus</li>
+      <li>Mon badge / QR Code</li>
+      <li>Mon profil</li>
+    </ul>
+  </div>
+  <div class="uc-card">
+    <h4>🔧 Espace Administrateur</h4>
+    <ul>
+      <li>Tableau de bord (KPIs)</li>
+      <li>Liste des inscriptions</li>
+      <li>Détail / validation dossier</li>
+      <li>Gestion des étudiants</li>
+      <li>Gestion des paiements</li>
+      <li>Rapports &amp; statistiques</li>
+      <li>Exportation données</li>
+    </ul>
+  </div>
+  <div class="uc-card">
+    <h4>🚌 Espace Responsable</h4>
+    <ul>
+      <li>Gestion des lignes</li>
+      <li>Gestion des arrêts</li>
+      <li>Gestion des bus</li>
+      <li>Planning des trajets</li>
+      <li>Affectation chauffeurs</li>
+    </ul>
+  </div>
+  <div class="uc-card">
+    <h4>🧑‍✈️ Espace Chauffeur</h4>
+    <ul>
+      <li>Planning du jour / semaine</li>
+      <li>Liste des passagers par trajet</li>
+      <li>Scanner QR Code (validation)</li>
+    </ul>
+  </div>
+</div>
+
+<!-- §11 -->
+<h2 class="section-title">§11 — Sécurité</h2>
+<table>
+  <thead><tr><th>Menace</th><th>Contre-mesure</th></tr></thead>
+  <tbody>
+    <tr><td>Accès non autorisé</td><td>Spring Security + JWT, @PreAuthorize par rôle</td></tr>
+    <tr><td>Vol de mot de passe</td><td>Hachage BCrypt (facteur 12)</td></tr>
+    <tr><td>Injection SQL</td><td>JPQL / Requêtes préparées (JPA), aucune requête native brute</td></tr>
+    <tr><td>XSS</td><td>Échappement des sorties React, CSP headers</td></tr>
+    <tr><td>CSRF</td><td>Désactivé (API stateless JWT), SameSite cookie policy</td></tr>
+    <tr><td>Upload malveillant</td><td>Validation type MIME + taille (max 5 MB, images seulement)</td></tr>
+    <tr><td>Exposition des données</td><td>DTOs (jamais d'entité directe exposée), HTTPS en prod</td></tr>
+    <tr><td>Brute force</td><td>Rate limiting (Spring + Bucket4j / niveau Nginx)</td></tr>
+  </tbody>
+</table>
+
+<!-- §12 -->
+<h2 class="section-title">§12 — Contraintes et Risques</h2>
+<table>
+  <thead><tr><th>Risque</th><th>Probabilité</th><th>Impact</th><th>Mitigation</th></tr></thead>
+  <tbody>
+    <tr><td>Dépassement de délai</td><td><span class="pill pill-orange">Moyen</span></td><td><span class="pill pill-red">Élevé</span></td><td>Planning détaillé + sprints hebdomadaires</td></tr>
+    <tr><td>Changement de périmètre</td><td><span class="pill pill-orange">Moyen</span></td><td><span class="pill pill-orange">Moyen</span></td><td>Gel du périmètre après validation CDC</td></tr>
+    <tr><td>Indisponibilité serveur</td><td><span class="pill pill-green">Faible</span></td><td><span class="pill pill-red">Élevé</span></td><td>Sauvegardes automatiques + plan de reprise</td></tr>
+    <tr><td>Faible adoption utilisateurs</td><td><span class="pill pill-orange">Moyen</span></td><td><span class="pill pill-orange">Moyen</span></td><td>Formation + interface intuitive</td></tr>
+    <tr><td>Données corrompues</td><td><span class="pill pill-green">Faible</span></td><td><span class="pill pill-red">Élevé</span></td><td>Transactions JPA, validations strictes</td></tr>
+  </tbody>
+</table>
+
+<!-- §13 -->
+<h2 class="section-title">§13 — Planning Prévisionnel</h2>
+<table>
+  <thead><tr><th>Phase</th><th>Contenu</th><th>Durée</th><th>Période</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Phase 1</strong></td><td>Planification, modélisation, maquettes</td><td>2 semaines</td><td>S1 – S2</td></tr>
+    <tr><td><strong>Phase 2</strong></td><td>Backend : entités JPA, Spring Security, API REST</td><td>3 semaines</td><td>S3 – S5</td></tr>
+    <tr><td><strong>Phase 3</strong></td><td>Frontend React : portails étudiant, admin, responsable</td><td>4 semaines</td><td>S6 – S9</td></tr>
+    <tr><td><strong>Phase 4</strong></td><td>Tests (JUnit, Cypress, Postman), correction bugs</td><td>2 semaines</td><td>S10 – S11</td></tr>
+    <tr><td><strong>Phase 5</strong></td><td>Déploiement, documentation, formation, recette</td><td>1 semaine</td><td>S12</td></tr>
+    <tr><td colspan="2"><strong>TOTAL</strong></td><td colspan="2"><strong>12 semaines (~3 mois)</strong></td></tr>
+  </tbody>
+</table>
+
+<!-- §14 -->
+<h2 class="section-title">§14 — Validation et Recette</h2>
+<h3 class="sub-title">14.1 Critères d'Acceptation</h3>
+<ul>
+  <li>Tous les cas d'utilisation définis au §6 sont opérationnels</li>
+  <li>Les tests unitaires couvrent ≥ 80 % du code backend (JaCoCo)</li>
+  <li>Aucun bug bloquant ou critique en recette</li>
+  <li>Temps de réponse API &lt; 2s sous charge de 200 utilisateurs</li>
+  <li>La documentation Swagger est complète et à jour</li>
+</ul>
+
+<h3 class="sub-title">14.2 Livrables</h3>
+<ul>
+  <li>📦 Code source complet (GitHub) — backend &amp; frontend</li>
+  <li>📄 Documentation technique (architecture, API Swagger)</li>
+  <li>📘 Manuel utilisateur (Étudiant / Admin / Responsable / Chauffeur)</li>
+  <li>🗄️ Scripts SQL de migration (Flyway)</li>
+  <li>🐳 Fichier <code>docker-compose.yml</code> pour déploiement rapide</li>
+  <li>📊 Rapport de tests (JUnit + Cypress)</li>
+</ul>
+
+<div class="box box-success" style="margin-top:40px">
+  <div class="box-title">✅ Approbation du Cahier des Charges</div>
+  Ce document a été rédigé et soumis pour validation. Toute modification ultérieure du périmètre devra faire l'objet d'un avenant signé par les deux parties.
+</div>
+
+<table style="margin-top:30px">
+  <thead><tr><th>Rôle</th><th>Nom</th><th>Signature</th><th>Date</th></tr></thead>
+  <tbody>
+    <tr><td>Maître d'ouvrage</td><td>_________________</td><td>_________________</td><td>___/___/______</td></tr>
+    <tr><td>Chef de projet</td><td>_________________</td><td>_________________</td><td>___/___/______</td></tr>
+    <tr><td>Responsable Technique</td><td>_________________</td><td>_________________</td><td>___/___/______</td></tr>
+  </tbody>
+</table>
+
+<!-- ══════════════════════════════════
+     §15 — DIAGRAMMES UML
+══════════════════════════════════ -->
+<h2 class="section-title" style="margin-top:60px">§15 — Diagrammes UML</h2>
+
+<!-- ─── 15.1 CAS D'UTILISATION ─── -->
+<h3 class="sub-title">15.1 Diagramme de Cas d'Utilisation</h3>
+<div class="box box-info" style="margin-bottom:12px">
+  <div class="box-title">👥 Acteurs &amp; Interactions</div>
+  Ce diagramme présente les 4 acteurs principaux du système et l'ensemble des cas d'utilisation qu'ils peuvent déclencher.
+</div>
+<div class="mermaid" style="background:#f7f9fc;border:1px solid #dde4f0;border-radius:10px;padding:24px;margin:16px 0;overflow-x:auto">
+flowchart LR
+    Etudiant(["🎓 Étudiant"])
+    Admin(["🔧 Administrateur"])
+    Responsable(["🚌 Responsable\nTransport"])
+    Chauffeur(["🧑‍✈️ Chauffeur"])
+    Systeme(["⚙️ Système"])
+
+    subgraph SYS["  Système TransportEtud  "]
+        direction TB
+        subgraph AUTH["🔐 Authentification"]
+            UC1["S'authentifier"]
+            UC2["Gérer son profil"]
+            UC3["Récupérer MDP"]
+        end
+        subgraph INSC["📝 Inscription"]
+            UC4["Soumettre un dossier"]
+            UC5["Suivre sa demande"]
+            UC6["Renouveler l'abonnement"]
+            UC7["Valider / Rejeter dossier"]
+            UC8["Consulter liste dossiers"]
+        end
+        subgraph PAY["💳 Paiement & Badge"]
+            UC9["Effectuer paiement"]
+            UC10["Télécharger reçu PDF"]
+            UC11["Obtenir badge QR Code"]
+            UC12["Vérifier badge"]
+        end
+        subgraph LIGNE["🗺️ Lignes & Ressources"]
+            UC13["Gérer lignes & arrêts"]
+            UC14["Gérer bus & trajets"]
+            UC15["Affecter chauffeurs"]
+        end
+        subgraph RAPPORT["📊 Rapports"]
+            UC16["Consulter tableau de bord"]
+            UC17["Générer rapports"]
+            UC18["Exporter données"]
+        end
+        subgraph NOTIF["🔔 Notifications"]
+            UC19["Envoyer emails auto"]
+            UC20["Rappels expiration"]
+        end
+    end
+
+    Etudiant --- UC1 & UC2 & UC3
+    Etudiant --- UC4 & UC5 & UC6
+    Etudiant --- UC9 & UC10 & UC11
+
+    Admin --- UC1 & UC7 & UC8
+    Admin --- UC9 & UC16 & UC17 & UC18
+
+    Responsable --- UC1 & UC13 & UC14 & UC15
+
+    Chauffeur --- UC1 & UC12
+
+    Systeme --- UC19 & UC20
+</div>
+
+<!-- ─── 15.2 DIAGRAMME DE CLASSES ─── -->
+<h3 class="sub-title" style="margin-top:40px">15.2 Diagramme de Classes</h3>
+<div class="box box-info" style="margin-bottom:12px">
+  <div class="box-title">🗂️ Structure du Modèle Objet</div>
+  13 classes métier avec attributs, méthodes et relations. L'héritage de <strong>Utilisateur</strong> représente les 4 rôles du système.
+</div>
+<div class="mermaid" style="background:#f7f9fc;border:1px solid #dde4f0;border-radius:10px;padding:24px;margin:16px 0;overflow-x:auto">
+classDiagram
+    class Utilisateur {
+        +Long id
+        +String nom
+        +String prenom
+        +String email
+        +String motDePasse
+        +String role
+        +String telephone
+        +boolean actif
+        +seConnecter()
+        +reinitialiserMDP()
+    }
+    class Etudiant {
+        +String numeroEtudiant
+        +String filiere
+        +int anneeEtude
+        +String photoURL
+        +getSesInscriptions()
+        +getBadge()
+    }
+    class Administrateur {
+        +validerInscription(id)
+        +rejeterInscription(id, motif)
+        +exporterRapport(format)
+    }
+    class ResponsableTransport {
+        +gererLigne(ligne)
+        +affecterBus(bus, ligne)
+        +affecterChauffeur(ch, trajet)
+    }
+    class Chauffeur {
+        +String numeroPermis
+        +getPlanning()
+        +getListePassagers(id)
+    }
+    class Inscription {
+        +Long id
+        +LocalDate dateInscription
+        +String statut
+        +String typeAbonnement
+        +LocalDate dateDebut
+        +LocalDate dateFin
+        +String motifRejet
+        +soumettre()
+        +annuler()
+        +renouveler()
+    }
+    class Ligne {
+        +Long id
+        +String nom
+        +String pointDepart
+        +String pointArrivee
+        +boolean estActive
+        +getArrets()
+    }
+    class Arret {
+        +Long id
+        +String nom
+        +String adresse
+        +int ordre
+    }
+    class Bus {
+        +Long id
+        +String immatriculation
+        +String marque
+        +int capacite
+        +String statut
+    }
+    class Trajet {
+        +Long id
+        +LocalTime heureDepart
+        +LocalTime heureArrivee
+        +String joursSemaine
+        +int placesDisponibles
+        +reserverPlace()
+    }
+    class Paiement {
+        +Long id
+        +Double montant
+        +LocalDate datePaiement
+        +String modePaiement
+        +String statut
+        +genererRecu()
+    }
+    class Badge {
+        +Long id
+        +String codeQR
+        +LocalDate dateExpiration
+        +boolean estValide
+        +genererPDF()
+        +verifier()
+    }
+    class Tarif {
+        +Long id
+        +String typeAbonnement
+        +Double montant
+        +calculerMontant()
+    }
+    class Notification {
+        +Long id
+        +String type
+        +String message
+        +LocalDateTime dateEnvoi
+        +boolean estLue
+        +envoyer()
+    }
+
+    Utilisateur <|-- Etudiant
+    Utilisateur <|-- Administrateur
+    Utilisateur <|-- ResponsableTransport
+    Utilisateur <|-- Chauffeur
+
+    Etudiant "1" --> "0..*" Inscription : soumet
+    Inscription "1" --> "1" Ligne : sur
+    Inscription "1" --> "1" Arret : arrêt choisi
+    Inscription "1" --> "0..1" Paiement : génère
+    Inscription "1" --> "0..1" Badge : produit
+    Inscription "*" --> "1" Tarif : applique
+    Ligne "1" --> "1..*" Arret : comprend
+    Ligne "1" --> "0..*" Trajet : planifie
+    Trajet "*" --> "1" Bus : utilise
+    Trajet "*" --> "0..1" Chauffeur : conduit par
+    Utilisateur "1" --> "0..*" Notification : reçoit
+</div>
+
+<!-- ─── 15.3 DIAGRAMME DE SÉQUENCE ─── -->
+<h3 class="sub-title" style="margin-top:40px">15.3 Diagramme de Séquence — Inscription Complète</h3>
+<div class="box box-info" style="margin-bottom:12px">
+  <div class="box-title">🔄 Flux Principal</div>
+  Flux complet : de la soumission du dossier par l'étudiant jusqu'à la génération et le téléchargement de son badge QR Code.
+</div>
+<div class="mermaid" style="background:#f7f9fc;border:1px solid #dde4f0;border-radius:10px;padding:24px;margin:16px 0;overflow-x:auto">
+sequenceDiagram
+    actor E as 🎓 Étudiant
+    participant F as React Frontend
+    participant SEC as Spring Security
+    participant IC as InscriptionController
+    participant IS as InscriptionService
+    participant PS as PaiementService
+    participant NS as NotificationService
+    participant DB as MySQL DB
+    actor A as 🔧 Administrateur
+
+    Note over E,DB: ── ÉTAPE 1 : Soumission du dossier ──
+    E->>F: Remplit formulaire inscription
+    F->>SEC: Requête avec JWT Token
+    SEC-->>F: Token valide ✅
+    F->>IC: POST /api/inscriptions
+    IC->>IS: soumettreDossier(dto)
+    IS->>DB: Vérifie places disponibles
+    DB-->>IS: Capacité OK
+    IS->>DB: Sauvegarde inscription (STATUT=EN_ATTENTE)
+    DB-->>IS: Inscription id=42 créée
+    IS->>NS: notifierEtudiant(42, SOUMIS)
+    NS-->>E: 📧 Email confirmation réception
+    IC-->>F: 201 Created
+    F-->>E: Dossier soumis avec succès
+
+    Note over E,DB: ── ÉTAPE 2 : Validation par Admin ──
+    A->>F: Consulte dossiers EN_ATTENTE
+    F->>IC: GET /api/inscriptions?statut=EN_ATTENTE
+    IC->>DB: Requête dossiers
+    DB-->>IC: Liste dossiers
+    IC-->>F: Dossiers retournés
+    A->>F: Valide dossier id=42
+    F->>IC: PATCH /api/inscriptions/42/valider
+    IC->>IS: validerInscription(42)
+    IS->>DB: UPDATE statut=VALIDEE
+    IS->>PS: calculerMontant(42)
+    PS-->>IS: Montant = 3000 DA
+    IS->>NS: notifierEtudiant(42, VALIDEE, 3000DA)
+    NS-->>E: 📧 Email validation + montant à payer
+
+    Note over E,DB: ── ÉTAPE 3 : Paiement & Badge ──
+    E->>F: Effectue paiement
+    F->>PS: POST /api/paiements
+    PS->>DB: Enregistre paiement (REGLE)
+    PS->>IS: genererBadge(42)
+    IS->>DB: Crée badge (QR Code unique)
+    DB-->>IS: Badge créé
+    IS->>NS: notifierEtudiant(42, BADGE_PRET)
+    NS-->>E: 📧 Badge disponible
+    PS-->>F: Reçu PDF + URL badge
+    F-->>E: ✅ Reçu + Bouton Télécharger Badge
+</div>
+
+<p style="text-align:center;color:#888;font-size:9pt;margin-top:50px;border-top:1px solid #eee;padding-top:16px">
+  TransportEtud v1.0 — Cahier des Charges — Mai 2026 — Confidentiel
+</p>
+
+</div><!-- end .page -->
+</body>
+</html>
