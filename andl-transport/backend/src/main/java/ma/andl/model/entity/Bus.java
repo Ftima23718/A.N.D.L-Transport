@@ -19,12 +19,16 @@ public class Bus {
     @Column(nullable = false, unique = true, length = 20)
     private String immatriculation;
 
-    private String marque;
-
+    private String modele;
+    
     @Column(nullable = false)
     private Integer capacite;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatutBus statut;
+
+    public boolean isActif() {
+        return StatutBus.ACTIF.equals(this.statut);
+    }
 }
