@@ -56,7 +56,7 @@ const InscriptionsPage: React.FC = () => {
 
   const handleExport = async (format: 'excel' | 'pdf') => {
       try {
-          const response = await api.get(`/api/exports/inscriptions/${format}`, { responseType: 'blob' });
+          const response = await api.get(`/exports/inscriptions/${format}`, { responseType: 'blob' });
           const url = window.URL.createObjectURL(new Blob([response.data]));
           const link = document.createElement('a');
           link.href = url;

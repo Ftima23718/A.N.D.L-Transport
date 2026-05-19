@@ -57,6 +57,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             // Si le token est invalide, on continue simplement la chaîne de filtres
             // Sans authentifier l'utilisateur.
+            System.out.println("[JwtAuthenticationFilter] Token invalide ou erreur JWT: " + e.getMessage());
         }
         filterChain.doFilter(request, response);
     }

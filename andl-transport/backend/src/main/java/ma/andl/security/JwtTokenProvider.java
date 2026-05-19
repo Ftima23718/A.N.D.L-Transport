@@ -54,10 +54,10 @@ public class JwtTokenProvider {
 
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
-                .verifyWith(getSigningKey())
+                .setSigningKey(getSigningKey())
                 .build()
-                .parseSignedClaims(token)
-                .getPayload();
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {

@@ -8,7 +8,7 @@ const BusChauffeursPage: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState<'buses' | 'chauffeurs'>('buses');
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingItem, setEditingItem] = useState<any>(null);
+    const [_editingItem, setEditingItem] = useState<any>(null);
 
     const fetchData = async () => {
         try {

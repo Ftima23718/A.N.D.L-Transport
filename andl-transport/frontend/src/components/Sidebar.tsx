@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, Users, CreditCard, Bus, MapPin, School, LogOut, ChevronRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { cn } from '../utils/cn';
@@ -10,6 +10,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ isAdmin }) => {
   const { logout, user } = useAuth();
+  const navigate = useNavigate();
 
   const adminLinks = [
     { to: '/admin/dashboard', icon: LayoutDashboard, label: 'Tableau de bord' },
@@ -31,6 +32,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isAdmin }) => {
   ];
 
   const links = isAdmin ? adminLinks : studentLinks;
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login', { replace: true });
+  };
 
   return (
     <aside className="w-72 h-screen bg-white border-r border-slate-100 flex flex-col fixed left-0 top-0 z-40">
@@ -74,7 +80,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isAdmin }) => {
         </div>
         
         <button
-          onClick={logout}
+          onClick={handleLogout}
           className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-500 hover:bg-red-50 transition-colors font-medium"
         >
           <LogOut className="w-5 h-5" />

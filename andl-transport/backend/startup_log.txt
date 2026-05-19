@@ -1,0 +1,407 @@
+﻿[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------------< ma.andl:andl-transport-backend >-------------------
+[INFO] Building ANDL Transport Backend 1.0.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot:3.2.5:run (default-cli) > test-compile @ andl-transport-backend >>>
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ andl-transport-backend ---
+[INFO] Copying 2 resources from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ andl-transport-backend ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ andl-transport-backend ---
+[INFO] skip non existing resourceDirectory C:\Users\THINKPAD\Desktop\Nouveau dossier (5)\andl-transport\backend\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ andl-transport-backend ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] <<< spring-boot:3.2.5:run (default-cli) < test-compile @ andl-transport-backend <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot:3.2.5:run (default-cli) @ andl-transport-backend ---
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.5)
+
+2026-05-16T14:05:53.222+01:00  INFO 17832 --- [andl-transport] [           main] ma.andl.AndlTransportApplication         : Starting AndlTransportApplication using Java 21.0.10 with PID 17832 (C:\Users\THINKPAD\Desktop\Nouveau dossier (5)\andl-transport\backend\target\classes started by THINKPAD in C:\Users\THINKPAD\Desktop\Nouveau dossier (5)\andl-transport\backend)
+2026-05-16T14:05:53.224+01:00 DEBUG 17832 --- [andl-transport] [           main] ma.andl.AndlTransportApplication         : Running with Spring Boot v3.2.5, Spring v6.1.6
+2026-05-16T14:05:53.226+01:00  INFO 17832 --- [andl-transport] [           main] ma.andl.AndlTransportApplication         : The following 1 profile is active: "h2"
+2026-05-16T14:05:56.270+01:00  INFO 17832 --- [andl-transport] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-16T14:05:56.539+01:00  INFO 17832 --- [andl-transport] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 247 ms. Found 13 JPA repository interfaces.
+2026-05-16T14:05:58.041+01:00  INFO 17832 --- [andl-transport] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-05-16T14:05:58.074+01:00  INFO 17832 --- [andl-transport] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-16T14:05:58.074+01:00  INFO 17832 --- [andl-transport] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2026-05-16T14:05:58.245+01:00  INFO 17832 --- [andl-transport] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-05-16T14:05:58.250+01:00  INFO 17832 --- [andl-transport] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4867 ms
+2026-05-16T14:05:58.343+01:00  INFO 17832 --- [andl-transport] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-16T14:05:58.915+01:00  INFO 17832 --- [andl-transport] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:andl_transport user=SA
+2026-05-16T14:05:58.917+01:00  INFO 17832 --- [andl-transport] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-05-16T14:05:58.943+01:00  INFO 17832 --- [andl-transport] [           main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:andl_transport'
+2026-05-16T14:05:59.225+01:00  INFO 17832 --- [andl-transport] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-16T14:05:59.362+01:00  INFO 17832 --- [andl-transport] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2026-05-16T14:05:59.458+01:00  INFO 17832 --- [andl-transport] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-05-16T14:06:00.509+01:00  INFO 17832 --- [andl-transport] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-16T14:06:00.642+01:00  WARN 17832 --- [andl-transport] [           main] org.hibernate.dialect.Dialect            : HHH000511: The 2.2.0 version for [org.hibernate.dialect.PostgreSQLDialect] is no longer supported, hence certain features may not work properly. The minimum supported version is 12.0.0. Check the community dialects project for available legacy versions.
+2026-05-16T14:06:00.673+01:00  WARN 17832 --- [andl-transport] [           main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-16T14:06:05.876+01:00  INFO 17832 --- [andl-transport] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Hibernate: 
+    alter table if exists administrateurs 
+       drop constraint if exists FKsfe67ak7m6se0xg0ry5lrxrlp
+Hibernate: 
+    alter table if exists arrets 
+       drop constraint if exists FKoyshsjhco5hcfg9hxum9uypn7
+Hibernate: 
+    alter table if exists badges 
+       drop constraint if exists FKkdn247pfyaal5ay7huki8nr1
+Hibernate: 
+    alter table if exists chauffeurs 
+       drop constraint if exists FKkf5ylj28d3elbt4kbf0gccr3a
+Hibernate: 
+    alter table if exists etudiants 
+       drop constraint if exists FKhj6sgslum0dw373777myjfjyp
+Hibernate: 
+    alter table if exists etudiants 
+       drop constraint if exists FKmcq8u7ayw6c7wxgwgq3ds0mtl
+Hibernate: 
+    alter table if exists inscriptions 
+       drop constraint if exists FKrbdv2i5mc55pqxpuwt4fgxdbh
+Hibernate: 
+    alter table if exists inscriptions 
+       drop constraint if exists FKa7902x00fxf7xtascfe57n7xk
+Hibernate: 
+    alter table if exists paiements 
+       drop constraint if exists FK4394fuqe1mg1tg9k0k722ssbp
+Hibernate: 
+    alter table if exists trajets 
+       drop constraint if exists FKph195nxteksnj1s7al7j5pnxp
+Hibernate: 
+    alter table if exists trajets 
+       drop constraint if exists FKbmtqxjjm5lb58o0vjuyiiwhg
+Hibernate: 
+    alter table if exists trajets 
+       drop constraint if exists FK31tbklmx8xo0w7s70mqwabbul
+Hibernate: 
+    drop table if exists administrateurs cascade
+Hibernate: 
+    drop table if exists arrets cascade
+Hibernate: 
+    drop table if exists badges cascade
+Hibernate: 
+    drop table if exists bus cascade
+Hibernate: 
+    drop table if exists chauffeurs cascade
+Hibernate: 
+    drop table if exists etablissements cascade
+Hibernate: 
+    drop table if exists etudiants cascade
+Hibernate: 
+    drop table if exists inscriptions cascade
+Hibernate: 
+    drop table if exists lignes cascade
+Hibernate: 
+    drop table if exists paiements cascade
+Hibernate: 
+    drop table if exists tarifs cascade
+Hibernate: 
+    drop table if exists trajets cascade
+Hibernate: 
+    drop table if exists utilisateurs cascade
+Hibernate: 
+    create table administrateurs (
+        id bigint not null,
+        primary key (id)
+    )
+Hibernate: 
+    create table arrets (
+        latitude float(53),
+        longitude float(53),
+        ordre integer,
+        id bigserial not null,
+        ligne_id bigint not null,
+        nom varchar(100) not null,
+        primary key (id)
+    )
+Hibernate: 
+    create table badges (
+        date_expiration date,
+        est_valide boolean not null,
+        id bigserial not null,
+        inscription_id bigint not null unique,
+        code_qr varchar(255) not null unique,
+        qr_code_base64 oid,
+        primary key (id)
+    )
+Hibernate: 
+    create table bus (
+        capacite integer not null,
+        id bigserial not null,
+        immatriculation varchar(20) not null unique,
+        modele varchar(255),
+        statut varchar(255) not null check (statut in ('ACTIF','EN_MAINTENANCE','HORS_SERVICE')),
+        primary key (id)
+    )
+Hibernate: 
+    create table chauffeurs (
+        id bigint not null,
+        numero_permis varchar(50) not null,
+        primary key (id)
+    )
+Hibernate: 
+    create table etablissements (
+        actif boolean not null,
+        id bigserial not null,
+        nom varchar(100) not null,
+        adresse varchar(255),
+        telephone varchar(255),
+        ville varchar(255),
+        primary key (id)
+    )
+Hibernate: 
+    create table etudiants (
+        date_naissance date not null,
+        etablissement_id bigint,
+        id bigint not null,
+        annee_scolaire varchar(255),
+        carte_etudiant_url varchar(255),
+        filiere varchar(255),
+        niveau_scolaire varchar(255),
+        numero_etudiant varchar(255) not null unique,
+        photo_url varchar(255),
+        primary key (id)
+    )
+Hibernate: 
+    create table inscriptions (
+        date_debut date,
+        date_fin date,
+        date_creation timestamp(6),
+        etudiant_id bigint not null,
+        id bigserial not null,
+        ligne_id bigint,
+        motif_rejet varchar(255),
+        statut varchar(255) not null check (statut in ('EN_ATTENTE','VALIDEE','REJETEE')),
+        type_abonnement varchar(255) not null check (type_abonnement in ('MENSUEL','TRIMESTRIEL','ANNUEL')),
+        primary key (id)
+    )
+Hibernate: 
+    create table lignes (
+        id bigserial not null,
+        nom varchar(100) not null,
+        description varchar(255),
+        primary key (id)
+    )
+Hibernate: 
+    create table paiements (
+        montant float(53) not null,
+        date_paiement timestamp(6),
+        id bigserial not null,
+        inscription_id bigint not null unique,
+        methode_paiement varchar(255),
+        statut varchar(255) not null check (statut in ('PAYE','EN_ATTENTE','ECHEC')),
+        primary key (id)
+    )
+Hibernate: 
+    create table tarifs (
+        montant float(53) not null,
+        id bigserial not null,
+        description varchar(255),
+        type_abonnement varchar(255) not null check (type_abonnement in ('MENSUEL','TRIMESTRIEL','ANNUEL')),
+        primary key (id)
+    )
+Hibernate: 
+    create table trajets (
+        heure_arrivee time(6) not null,
+        heure_depart time(6) not null,
+        places_disponibles integer not null,
+        bus_id bigint,
+        chauffeur_id bigint,
+        id bigserial not null,
+        ligne_id bigint not null,
+        jours_semaine varchar(255),
+        primary key (id)
+    )
+Hibernate: 
+    create table utilisateurs (
+        actif boolean not null,
+        date_creation timestamp(6),
+        date_modification timestamp(6),
+        id bigserial not null,
+        telephone varchar(20),
+        nom varchar(50) not null,
+        prenom varchar(50) not null,
+        email varchar(100) not null unique,
+        mot_de_passe varchar(255) not null,
+        role varchar(255) not null check (role in ('ADMIN','ETUDIANT','CHAUFFEUR','RESPONSABLE')),
+        primary key (id)
+    )
+Hibernate: 
+    alter table if exists administrateurs 
+       add constraint FKsfe67ak7m6se0xg0ry5lrxrlp 
+       foreign key (id) 
+       references utilisateurs
+Hibernate: 
+    alter table if exists arrets 
+       add constraint FKoyshsjhco5hcfg9hxum9uypn7 
+       foreign key (ligne_id) 
+       references lignes
+Hibernate: 
+    alter table if exists badges 
+       add constraint FKkdn247pfyaal5ay7huki8nr1 
+       foreign key (inscription_id) 
+       references inscriptions
+Hibernate: 
+    alter table if exists chauffeurs 
+       add constraint FKkf5ylj28d3elbt4kbf0gccr3a 
+       foreign key (id) 
+       references utilisateurs
+Hibernate: 
+    alter table if exists etudiants 
+       add constraint FKhj6sgslum0dw373777myjfjyp 
+       foreign key (etablissement_id) 
+       references etablissements
+Hibernate: 
+    alter table if exists etudiants 
+       add constraint FKmcq8u7ayw6c7wxgwgq3ds0mtl 
+       foreign key (id) 
+       references utilisateurs
+Hibernate: 
+    alter table if exists inscriptions 
+       add constraint FKrbdv2i5mc55pqxpuwt4fgxdbh 
+       foreign key (etudiant_id) 
+       references etudiants
+Hibernate: 
+    alter table if exists inscriptions 
+       add constraint FKa7902x00fxf7xtascfe57n7xk 
+       foreign key (ligne_id) 
+       references lignes
+Hibernate: 
+    alter table if exists paiements 
+       add constraint FK4394fuqe1mg1tg9k0k722ssbp 
+       foreign key (inscription_id) 
+       references inscriptions
+Hibernate: 
+    alter table if exists trajets 
+       add constraint FKph195nxteksnj1s7al7j5pnxp 
+       foreign key (bus_id) 
+       references bus
+Hibernate: 
+    alter table if exists trajets 
+       add constraint FKbmtqxjjm5lb58o0vjuyiiwhg 
+       foreign key (chauffeur_id) 
+       references chauffeurs
+Hibernate: 
+    alter table if exists trajets 
+       add constraint FK31tbklmx8xo0w7s70mqwabbul 
+       foreign key (ligne_id) 
+       references lignes
+2026-05-16T14:06:06.401+01:00  INFO 17832 --- [andl-transport] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-16T14:06:07.909+01:00 DEBUG 17832 --- [andl-transport] [           main] m.andl.security.JwtAuthenticationFilter  : Filter 'jwtAuthenticationFilter' configured for use
+2026-05-16T14:06:08.383+01:00  INFO 17832 --- [andl-transport] [           main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-16T14:06:10.463+01:00  WARN 17832 --- [andl-transport] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-16T14:06:11.299+01:00  INFO 17832 --- [andl-transport] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@629e9957, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@5decbb5f, org.springframework.security.web.context.SecurityContextHolderFilter@677480c8, org.springframework.security.web.header.HeaderWriterFilter@77f21c0a, org.springframework.web.filter.CorsFilter@75952723, org.springframework.security.web.authentication.logout.LogoutFilter@14ab3e22, ma.andl.security.JwtAuthenticationFilter@4bca2a09, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5a271f3b, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6291d30, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@510ee215, org.springframework.security.web.session.SessionManagementFilter@6c3a3d87, org.springframework.security.web.access.ExceptionTranslationFilter@1159a049, org.springframework.security.web.access.intercept.AuthorizationFilter@1ed43328]
+2026-05-16T14:06:11.763+01:00  WARN 17832 --- [andl-transport] [           main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-05-16T14:06:11.771+01:00  INFO 17832 --- [andl-transport] [           main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+Hibernate: 
+    alter table if exists administrateurs 
+       drop constraint if exists FKsfe67ak7m6se0xg0ry5lrxrlp
+Hibernate: 
+    alter table if exists arrets 
+       drop constraint if exists FKoyshsjhco5hcfg9hxum9uypn7
+Hibernate: 
+    alter table if exists badges 
+       drop constraint if exists FKkdn247pfyaal5ay7huki8nr1
+Hibernate: 
+    alter table if exists chauffeurs 
+       drop constraint if exists FKkf5ylj28d3elbt4kbf0gccr3a
+Hibernate: 
+    alter table if exists etudiants 
+       drop constraint if exists FKhj6sgslum0dw373777myjfjyp
+Hibernate: 
+    alter table if exists etudiants 
+       drop constraint if exists FKmcq8u7ayw6c7wxgwgq3ds0mtl
+Hibernate: 
+    alter table if exists inscriptions 
+       drop constraint if exists FKrbdv2i5mc55pqxpuwt4fgxdbh
+Hibernate: 
+    alter table if exists inscriptions 
+       drop constraint if exists FKa7902x00fxf7xtascfe57n7xk
+Hibernate: 
+    alter table if exists paiements 
+       drop constraint if exists FK4394fuqe1mg1tg9k0k722ssbp
+Hibernate: 
+    alter table if exists trajets 
+       drop constraint if exists FKph195nxteksnj1s7al7j5pnxp
+Hibernate: 
+    alter table if exists trajets 
+       drop constraint if exists FKbmtqxjjm5lb58o0vjuyiiwhg
+Hibernate: 
+    alter table if exists trajets 
+       drop constraint if exists FK31tbklmx8xo0w7s70mqwabbul
+Hibernate: 
+    drop table if exists administrateurs cascade
+Hibernate: 
+    drop table if exists arrets cascade
+Hibernate: 
+    drop table if exists badges cascade
+Hibernate: 
+    drop table if exists bus cascade
+Hibernate: 
+    drop table if exists chauffeurs cascade
+Hibernate: 
+    drop table if exists etablissements cascade
+Hibernate: 
+    drop table if exists etudiants cascade
+Hibernate: 
+    drop table if exists inscriptions cascade
+Hibernate: 
+    drop table if exists lignes cascade
+Hibernate: 
+    drop table if exists paiements cascade
+Hibernate: 
+    drop table if exists tarifs cascade
+Hibernate: 
+    drop table if exists trajets cascade
+Hibernate: 
+    drop table if exists utilisateurs cascade
+2026-05-16T14:06:11.804+01:00  INFO 17832 --- [andl-transport] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-05-16T14:06:11.804+01:00  INFO 17832 --- [andl-transport] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-05-16T14:06:11.825+01:00  INFO 17832 --- [andl-transport] [           main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-05-16T14:06:11.846+01:00 ERROR 17832 --- [andl-transport] [           main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  29.129 s
+[INFO] Finished at: 2026-05-16T14:06:11+01:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.springframework.boot:spring-boot-maven-plugin:3.2.5:run (default-cli) on project andl-transport-backend: Process terminated with exit code: 1 -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException

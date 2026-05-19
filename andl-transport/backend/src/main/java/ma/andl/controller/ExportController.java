@@ -59,4 +59,16 @@ public class ExportController {
                 .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                 .body(new InputStreamResource(in));
     }
+
+    @GetMapping("/paiements/pdf")
+    public ResponseEntity<InputStreamResource> exportPaiementsPdf() throws Exception {
+        ByteArrayInputStream in = exportService.exportPaiementsToPdf();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=paiements.pdf");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(in));
+    }
 }

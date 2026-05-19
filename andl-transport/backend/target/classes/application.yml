@@ -29,7 +29,7 @@ spring:
       mail.smtp.starttls.enable: true
 
 server:
-  port: 8080
+  port: 8081
 
 jwt:
   secret: ${JWT_SECRET:andl-transport-very-long-secret-key-2024-security}

@@ -33,6 +33,7 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) {
         // 1. Créer l'admin par défaut
         if (!utilisateurRepository.existsByEmail("admin@andl.ma")) {
+            System.out.println("CREATING DEFAULT ADMIN: admin@andl.ma / Admin@2024");
             Administrateur admin = Administrateur.builder()
                     .nom("Administrateur")
                     .prenom("A.N.D.L")
@@ -42,6 +43,9 @@ public class DataInitializer implements CommandLineRunner {
                     .actif(true)
                     .build();
             administrateurRepository.save(admin);
+            System.out.println("DEFAULT ADMIN CREATED SUCCESSFULLY");
+        } else {
+            System.out.println("DEFAULT ADMIN ALREADY EXISTS");
         }
 
         // 2. Créer les tarifs par défaut

@@ -41,13 +41,13 @@ const GestionPaiementsPage: React.FC = () => {
         }
     };
 
-    const handleExport = async () => {
+    const handleExport = async (format: 'excel' | 'pdf') => {
         try {
-            const response = await api.get('/exports/paiements/excel', { responseType: 'blob' });
+            const response = await api.get(`/exports/paiements/${format}`, { responseType: 'blob' });
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', 'paiements.xlsx');
+            link.setAttribute('download', `paiements.${format === 'excel' ? 'xlsx' : 'pdf'}`);
             document.body.appendChild(link);
             link.click();
         } catch (err) {
@@ -87,12 +87,20 @@ const GestionPaiementsPage: React.FC = () => {
                             className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                         />
                     </div>
-                    <button 
-                        onClick={handleExport}
-                        className="flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-600 rounded-xl hover:bg-emerald-100 transition-colors font-medium">
-                        <Download className="w-4 h-4" />
-                        <span>Exporter Excel</span>
-                    </button>
+                    <div className="flex gap-2">
+                        <button 
+                            onClick={() => handleExport('excel')}
+                            className="flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-600 rounded-xl hover:bg-emerald-100 transition-colors font-medium">
+                            <Download className="w-4 h-4" />
+                            <span>Excel</span>
+                        </button>
+                        <button 
+                            onClick={() => handleExport('pdf')}
+                            className="flex items-center gap-2 px-4 py-2 bg-rose-50 text-rose-600 rounded-xl hover:bg-rose-100 transition-colors font-medium">
+                            <Download className="w-4 h-4" />
+                            <span>PDF</span>
+                        </button>
+                    </div>
                 </div>
 
                 <div className="overflow-x-auto">

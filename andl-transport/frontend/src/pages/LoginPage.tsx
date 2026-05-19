@@ -20,16 +20,33 @@ const LoginPage: React.FC = () => {
     setError('');
     
     try {
+      console.debug('[LoginPage] submitting login', { email, motDePasse: password });
       const data = await authService.login({ email, motDePasse: password });
+      console.debug('[LoginPage] login successful response', data);
       login(data.token, {
         email: data.email,
         role: data.role,
         nom: data.nom,
         prenom: data.prenom
       });
-      navigate('/');
+      
+      // Navigate based on role - use replace to prevent back button
+      if (data.role === 'ADMIN') {
+        navigate('/admin/dashboard', { replace: true });
+      } else if (data.role === 'ETUDIANT') {
+        navigate('/etudiant/dashboard', { replace: true });
+      } else {
+        navigate('/', { replace: true });
+      }
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Identifiants invalides ou erreur serveur');
+      console.error('[LoginPage] Login error:', err);
+      if (!err.response) {
+        setError('Impossible de contacter le serveur (Port 8081). Vérifiez que le backend est lancé.');
+      } else {
+        const message = err.response?.data?.message || 'Identifiants invalides ou erreur serveur';
+        console.warn('[LoginPage] backend error message:', message);
+        setError(message);
+      }
     } finally {
       setLoading(false);
     }

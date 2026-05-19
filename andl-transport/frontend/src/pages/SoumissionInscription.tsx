@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Bus, MapPin, Search, Send, Loader2, CheckCircle, Info } from 'lucide-react';
+import { Bus, MapPin, Send, Loader2, CheckCircle, Info } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 
@@ -16,7 +16,7 @@ const SoumissionInscription: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [lRes, tRes] = await Promise.all([
+        await Promise.all([
           api.get('/etablissements'), // Pour l'instant placeholder, devrait être /lignes
           api.get('/admin/stats') // Pour l'instant placeholder, devrait être /tarifs
         ]);

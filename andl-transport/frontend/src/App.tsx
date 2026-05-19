@@ -16,26 +16,52 @@ import TarifManagementPage from './pages/TarifManagementPage';
 import QRScannerPage from './pages/QRScannerPage';
 
 const ProtectedRoute = ({ children, role }: { children: React.ReactNode, role?: string }) => {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, isLoading } = useAuth();
   
-  if (!isAuthenticated) return <Navigate to="/login" />;
-  if (role && user?.role !== role) return <Navigate to="/" />;
+  // Afficher un écran de chargement pendant que nous récupérons l'authentification
+  if (isLoading) {
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-blue-900 via-blue-800 to-emerald-800">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
+          <p className="text-white text-lg font-semibold">Chargement...</p>
+        </div>
+      </div>
+    );
+  }
+  
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (role && user?.role !== role) return <Navigate to="/" replace />;
   
   return <Layout>{children}</Layout>;
 };
 
 function AppRoutes() {
-  const { isAuthenticated, isAdmin } = useAuth();
+  const { isAuthenticated, isAdmin, isLoading } = useAuth();
+
+  // Écran de chargement au démarrage
+  if (isLoading) {
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-blue-900 via-blue-800 to-emerald-800">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
+          <p className="text-white text-lg font-semibold">Chargement de l'application...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Routes>
-      <Route path="/login" element={!isAuthenticated ? <LoginPage /> : <Navigate to="/" />} />
+      <Route path="/login" element={!isAuthenticated ? <LoginPage /> : <Navigate to={isAdmin ? "/admin/dashboard" : "/etudiant/dashboard"} replace />} />
       <Route path="/register" element={<RegisterPage />} />
       
       <Route path="/" element={
-        <ProtectedRoute>
-          {isAdmin ? <Navigate to="/admin/dashboard" /> : <Navigate to="/etudiant/dashboard" />}
-        </ProtectedRoute>
+        isAuthenticated ? (
+          <Navigate to={isAdmin ? "/admin/dashboard" : "/etudiant/dashboard"} replace />
+        ) : (
+          <Navigate to="/login" replace />
+        )
       } />
 
       <Route path="/admin/dashboard" element={

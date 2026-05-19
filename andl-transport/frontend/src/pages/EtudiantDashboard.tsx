@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { QrCode, Bus, Clock, CreditCard, ExternalLink, ShieldCheck, Download } from 'lucide-react';
+import { QrCode, Bus, Clock, CreditCard, ExternalLink, ShieldCheck, Download, Check, AlertCircle } from 'lucide-react';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
@@ -9,28 +9,77 @@ const EtudiantDashboard: React.FC = () => {
   const [inscriptions, setInscriptions] = useState<any[]>([]);
   const [badge, setBadge] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get('/inscriptions/ma-liste');
-        setInscriptions(response.data);
+        setError(null);
+        console.log('Fetching inscriptions for user:', user?.email);
         
-        const validInsc = response.data.find((i: any) => i.statut === 'VALIDEE');
+        const response = await api.get('/inscriptions/ma-liste');
+        console.log('Inscriptions response:', response.data);
+        
+        setInscriptions(response.data || []);
+        
+        const validInsc = (response.data || []).find((i: any) => i.statut === 'VALIDEE');
         if (validInsc) {
+          console.log('Fetching badge for inscription:', validInsc.id);
           const badgeRes = await api.get(`/badges/inscription/${validInsc.id}`);
+          console.log('Badge response:', badgeRes.data);
           setBadge(badgeRes.data);
+        } else {
+          console.log('No validated inscription found');
+          setBadge(null);
         }
-      } catch (err) {
-        console.error('Erreur chargement espace étudiant', err);
+      } catch (err: any) {
+        console.error('Erreur chargement espace étudiant:', err);
+        setError(err.response?.data?.message || err.message || 'Erreur lors du chargement des données');
       } finally {
         setLoading(false);
       }
     };
     fetchData();
-  }, []);
+  }, [user?.email]);
 
-  if (loading) return <div>Chargement de votre espace...</div>;
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+          <p className="text-slate-600 font-semibold">Chargement de votre espace...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-8 pb-12">
+        <div className="bg-rose-50 border border-rose-200 rounded-2xl p-6 flex items-start gap-4">
+          <AlertCircle className="w-6 h-6 text-rose-600 flex-shrink-0 mt-1" />
+          <div>
+            <h3 className="font-bold text-rose-900 mb-1">Erreur de chargement</h3>
+            <p className="text-rose-700 text-sm">{error}</p>
+            <button 
+              onClick={() => window.location.reload()}
+              className="mt-4 px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-700 transition-colors"
+            >
+              Réessayer
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-slate-600">Impossible de charger votre profil. Veuillez vous reconnecter.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8 pb-12">

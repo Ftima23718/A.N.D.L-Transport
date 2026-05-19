@@ -46,11 +46,14 @@ const RegisterPage: React.FC = () => {
     setError('');
     
     try {
+      console.debug('[RegisterPage] submit register:', formData);
       await authService.register(formData);
       setSuccess(true);
-      setTimeout(() => navigate('/login'), 2000);
+      setTimeout(() => navigate('/login', { replace: true }), 2000);
     } catch (err: any) {
-      setError(err.response?.data?.message || "Erreur lors de l'inscription");
+      console.error('Register error:', err);
+      const message = err.response?.data?.message || "Erreur lors de l'inscription";
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -188,10 +191,19 @@ const RegisterPage: React.FC = () => {
                   className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none appearance-none"
                 >
                   <option value="">Sélectionner un établissement</option>
-                  <option value="LYCEE_TECHNIQUE">Lycée Technique</option>
-                  <option value="FACULTE_DES_SCIENCES">Faculté des Sciences</option>
-                  <option value="EST">EST</option>
-                  {/* Plus tard charger depuis l'API */}
+                  {Array.isArray(etablissements) && etablissements.length > 0 ? (
+                    etablissements.map((etab: any) => (
+                      <option key={etab.id} value={etab.id || etab.nom}>
+                        {etab.nom}
+                      </option>
+                    ))
+                  ) : (
+                    <>
+                      <option value="LYCEE_TECHNIQUE">Lycée Technique</option>
+                      <option value="FACULTE_DES_SCIENCES">Faculté des Sciences</option>
+                      <option value="EST">EST</option>
+                    </>
+                  )}
                 </select>
               </div>
             </div>
