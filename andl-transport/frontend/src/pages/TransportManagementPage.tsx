@@ -6,21 +6,37 @@ const TransportManagementPage: React.FC = () => {
     const [lignes, setLignes] = useState<any[]>([]);
     const [arrets, setArrets] = useState<any[]>([]);
     const [trajets, setTrajets] = useState<any[]>([]);
+    const [buses, setBuses] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState<'lignes' | 'arrets' | 'trajets'>('lignes');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingItem, setEditingItem] = useState<any>(null);
 
+    const getEmptyItem = (tab: typeof activeTab) => {
+        switch (tab) {
+            case 'lignes':
+                return { nom: '', description: '' };
+            case 'arrets':
+                return { nom: '', ligneId: '', latitude: '', longitude: '', ordre: 1 };
+            case 'trajets':
+                return { ligneId: '', busId: '', heureDepart: '06:00', heureArrivee: '07:00', joursSemaine: 'Lundi - Vendredi' };
+            default:
+                return {};
+        }
+    };
+
     const fetchData = async () => {
         try {
-            const [lRes, aRes, tRes] = await Promise.all([
+            const [lRes, aRes, tRes, bRes] = await Promise.all([
                 api.get('/transport/lignes'),
                 api.get('/transport/arrets'),
-                api.get('/transport/trajets')
+                api.get('/transport/trajets'),
+                api.get('/transport/bus')
             ]);
             setLignes(lRes.data);
             setArrets(aRes.data);
             setTrajets(tRes.data);
+            setBuses(bRes.data);
         } catch (err) {
             console.error('Erreur chargement transport', err);
         } finally {
@@ -44,8 +60,19 @@ const TransportManagementPage: React.FC = () => {
 
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!editingItem) return;
+
         try {
-            await api.post(`/transport/${activeTab}`, editingItem);
+            const payload = {
+                ...editingItem,
+                ligneId: editingItem.ligneId ? Number(editingItem.ligneId) : undefined,
+                busId: editingItem.busId ? Number(editingItem.busId) : undefined,
+                ordre: editingItem.ordre ? Number(editingItem.ordre) : undefined,
+                latitude: editingItem.latitude ? Number(editingItem.latitude) : undefined,
+                longitude: editingItem.longitude ? Number(editingItem.longitude) : undefined,
+            };
+
+            await api.post(`/transport/${activeTab}`, payload);
             setIsModalOpen(false);
             setEditingItem(null);
             fetchData();
@@ -62,7 +89,7 @@ const TransportManagementPage: React.FC = () => {
                     <p className="text-slate-500">Gérez les lignes, les arrêts et les trajets du réseau</p>
                 </div>
                 <button 
-                    onClick={() => { setEditingItem({}); setIsModalOpen(true); }}
+                    onClick={() => { setEditingItem(getEmptyItem(activeTab)); setIsModalOpen(true); }}
                     className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-2xl hover:bg-blue-700 transition-all font-bold shadow-lg shadow-blue-100"
                 >
                     <Plus className="w-5 h-5" />
@@ -182,16 +209,163 @@ const TransportManagementPage: React.FC = () => {
                 </div>
             </div>
 
-            {/* Modal placeholder (to be refined) */}
-            {isModalOpen && (
+            {isModalOpen && editingItem && (
                 <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                    <div className="bg-white rounded-3xl w-full max-w-md p-8 shadow-2xl">
-                        <h2 className="text-2xl font-bold mb-6">Ajouter/Modifier {activeTab}</h2>
-                        {/* Dynamic fields would go here */}
-                        <div className="flex justify-end gap-3 mt-6">
-                            <button onClick={() => setIsModalOpen(false)} className="px-6 py-2 text-slate-600">Annuler</button>
-                            <button onClick={handleSave} className="px-6 py-2 bg-blue-600 text-white rounded-xl">Enregistrer</button>
+                    <div className="bg-white rounded-3xl w-full max-w-xl p-8 shadow-2xl">
+                        <div className="flex items-center justify-between mb-6">
+                            <h2 className="text-2xl font-bold">Ajouter / Modifier {activeTab === 'lignes' ? 'une ligne' : activeTab === 'arrets' ? 'un arrêt' : 'un trajet'}</h2>
+                            <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-700">Fermer</button>
                         </div>
+                        <form className="grid gap-4" onSubmit={handleSave}>
+                            {activeTab === 'lignes' && (
+                                <>
+                                    <label className="block">
+                                        <span className="text-sm font-semibold text-slate-600">Nom de la ligne</span>
+                                        <input
+                                            type="text"
+                                            value={editingItem.nom || ''}
+                                            onChange={e => setEditingItem({...editingItem, nom: e.target.value})}
+                                            className="mt-1 w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none"
+                                            required
+                                        />
+                                    </label>
+                                    <label className="block">
+                                        <span className="text-sm font-semibold text-slate-600">Description</span>
+                                        <textarea
+                                            value={editingItem.description || ''}
+                                            onChange={e => setEditingItem({...editingItem, description: e.target.value})}
+                                            className="mt-1 w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none min-h-[120px]"
+                                        />
+                                    </label>
+                                </>
+                            )}
+                            {activeTab === 'arrets' && (
+                                <>
+                                    <label className="block">
+                                        <span className="text-sm font-semibold text-slate-600">Nom de l'arrêt</span>
+                                        <input
+                                            type="text"
+                                            value={editingItem.nom || ''}
+                                            onChange={e => setEditingItem({...editingItem, nom: e.target.value})}
+                                            className="mt-1 w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none"
+                                            required
+                                        />
+                                    </label>
+                                    <label className="block">
+                                        <span className="text-sm font-semibold text-slate-600">Ligne</span>
+                                        <select
+                                            value={editingItem.ligneId || ''}
+                                            onChange={e => setEditingItem({...editingItem, ligneId: e.target.value})}
+                                            className="mt-1 w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none"
+                                            required
+                                        >
+                                            <option value="">Sélectionnez une ligne</option>
+                                            {lignes.map(l => (
+                                                <option key={l.id} value={l.id}>{l.nom}</option>
+                                            ))}
+                                        </select>
+                                    </label>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <label className="block">
+                                            <span className="text-sm font-semibold text-slate-600">Latitude</span>
+                                            <input
+                                                type="number"
+                                                step="0.000001"
+                                                value={editingItem.latitude || ''}
+                                                onChange={e => setEditingItem({...editingItem, latitude: e.target.value})}
+                                                className="mt-1 w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none"
+                                            />
+                                        </label>
+                                        <label className="block">
+                                            <span className="text-sm font-semibold text-slate-600">Longitude</span>
+                                            <input
+                                                type="number"
+                                                step="0.000001"
+                                                value={editingItem.longitude || ''}
+                                                onChange={e => setEditingItem({...editingItem, longitude: e.target.value})}
+                                                className="mt-1 w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none"
+                                            />
+                                        </label>
+                                    </div>
+                                    <label className="block">
+                                        <span className="text-sm font-semibold text-slate-600">Ordre</span>
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            value={editingItem.ordre || 1}
+                                            onChange={e => setEditingItem({...editingItem, ordre: Number(e.target.value)})}
+                                            className="mt-1 w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none"
+                                        />
+                                    </label>
+                                </>
+                            )}
+                            {activeTab === 'trajets' && (
+                                <>
+                                    <label className="block">
+                                        <span className="text-sm font-semibold text-slate-600">Ligne</span>
+                                        <select
+                                            value={editingItem.ligneId || ''}
+                                            onChange={e => setEditingItem({...editingItem, ligneId: e.target.value})}
+                                            className="mt-1 w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none"
+                                            required
+                                        >
+                                            <option value="">Sélectionnez une ligne</option>
+                                            {lignes.map(l => (
+                                                <option key={l.id} value={l.id}>{l.nom}</option>
+                                            ))}
+                                        </select>
+                                    </label>
+                                    <label className="block">
+                                        <span className="text-sm font-semibold text-slate-600">Bus</span>
+                                        <select
+                                            value={editingItem.busId || ''}
+                                            onChange={e => setEditingItem({...editingItem, busId: e.target.value})}
+                                            className="mt-1 w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none"
+                                        >
+                                            <option value="">Bus non assigné</option>
+                                            {buses.map(bus => (
+                                                <option key={bus.id} value={bus.id}>#{bus.id} - {bus.matricule || bus.modele || 'Bus'}</option>
+                                            ))}
+                                        </select>
+                                    </label>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <label className="block">
+                                            <span className="text-sm font-semibold text-slate-600">Heure de départ</span>
+                                            <input
+                                                type="time"
+                                                value={editingItem.heureDepart || '06:00'}
+                                                onChange={e => setEditingItem({...editingItem, heureDepart: e.target.value})}
+                                                className="mt-1 w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none"
+                                                required
+                                            />
+                                        </label>
+                                        <label className="block">
+                                            <span className="text-sm font-semibold text-slate-600">Heure d'arrivée</span>
+                                            <input
+                                                type="time"
+                                                value={editingItem.heureArrivee || '07:00'}
+                                                onChange={e => setEditingItem({...editingItem, heureArrivee: e.target.value})}
+                                                className="mt-1 w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none"
+                                                required
+                                            />
+                                        </label>
+                                    </div>
+                                    <label className="block">
+                                        <span className="text-sm font-semibold text-slate-600">Jours de circulation</span>
+                                        <input
+                                            type="text"
+                                            value={editingItem.joursSemaine || ''}
+                                            onChange={e => setEditingItem({...editingItem, joursSemaine: e.target.value})}
+                                            className="mt-1 w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none"
+                                        />
+                                    </label>
+                                </>
+                            )}
+                            <div className="flex flex-col sm:flex-row justify-end gap-3 mt-6">
+                                <button type="button" onClick={() => setIsModalOpen(false)} className="px-6 py-3 border border-slate-200 rounded-2xl text-slate-600 hover:bg-slate-50">Annuler</button>
+                                <button type="submit" className="px-6 py-3 bg-blue-600 text-white rounded-2xl hover:bg-blue-700">Enregistrer</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             )}

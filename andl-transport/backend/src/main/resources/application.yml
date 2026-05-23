@@ -1,3 +1,6 @@
+server:
+  port: 8081
+
 spring:
   application:
     name: andl-transport
@@ -27,9 +30,6 @@ spring:
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
-
-server:
-  port: 8081
 
 jwt:
   secret: ${JWT_SECRET:andl-transport-very-long-secret-key-2024-security}

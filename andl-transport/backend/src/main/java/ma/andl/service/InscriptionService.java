@@ -110,4 +110,59 @@ public class InscriptionService {
                 .aBadge(i.getBadge() != null)
                 .build();
     }
+    // ma/andl/service/InscriptionService.java - Ajouter cette méthode
+    public ItineraireResponse getMonItineraire(String email) {
+        Etudiant etudiant = utilisateurRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Étudiant non trouvé"));
+
+        Inscription inscriptionActive = inscriptionRepository
+                .findByEtudiantAndStatut(etudiant, StatutInscription.VALIDEE)
+                .orElseThrow(() -> new RuntimeException("Aucune inscription active trouvée"));
+
+        Ligne ligne = inscriptionActive.getLigne();
+        if (ligne == null) {
+            throw new RuntimeException("Aucune ligne associée à cette inscription");
+        }
+
+        List<Arret> arrets = arretRepository.findByLigneOrderByOrdre(ligne);
+
+        List<ItineraireResponse.ArretItineraire> arretResponses = new ArrayList<>();
+        for (int i = 0; i < arrets.size(); i++) {
+            Arret arret = arrets.get(i);
+            arretResponses.add(ItineraireResponse.ArretItineraire.builder()
+                    .id(arret.getId())
+                    .nom(arret.getNom())
+                    .latitude(arret.getLatitude())
+                    .longitude(arret.getLongitude())
+                    .ordre(arret.getOrdre())
+                    .isDepart(i == 0)
+                    .isDestination(i == arrets.size() - 1)
+                    .build());
+        }
+
+        // Trouver le prochain trajet
+        Trajet prochainTrajet = trajetRepository
+                .findFirstByLigneAndHeureDepartAfterOrderByHeureDepartAsc(ligne, LocalTime.now())
+                .orElse(trajetRepository.findFirstByLigneOrderByHeureDepartAsc(ligne)
+                        .orElse(null));
+
+        ItineraireResponse.ProchainTrajet prochain = null;
+        if (prochainTrajet != null) {
+            long minutesRestantes = Duration.between(LocalTime.now(), prochainTrajet.getHeureDepart()).toMinutes();
+            prochain = ItineraireResponse.ProchainTrajet.builder()
+                    .heureDepart(prochainTrajet.getHeureDepart())
+                    .heureArrivee(prochainTrajet.getHeureArrivee())
+                    .minutesRestantes(String.valueOf(Math.max(0, minutesRestantes)))
+                    .busMatricule(prochainTrajet.getBus() != null ? prochainTrajet.getBus().getMatricule() : "Non assigné")
+                    .build();
+        }
+
+        return ItineraireResponse.builder()
+                .ligneId(ligne.getId())
+                .ligneNom(ligne.getNom())
+                .ligneDescription(ligne.getDescription())
+                .arrets(arretResponses)
+                .prochainTrajet(prochain)
+                .build();
+    }
 }

@@ -32,4 +32,10 @@ public class InscriptionController {
     public ResponseEntity<List<InscriptionResponse>> getMesInscriptions(Authentication authentication) {
         return ResponseEntity.ok(inscriptionService.getMesInscriptions(authentication.getName()));
     }
+    // ma/andl/controller/InscriptionController.java - Ajouter cette méthode
+    @GetMapping("/mon-itineraire")
+    @PreAuthorize("hasRole('ETUDIANT')")
+    public ResponseEntity<ItineraireResponse> getMonItineraire(Authentication authentication) {
+        return ResponseEntity.ok(inscriptionService.getMonItineraire(authentication.getName()));
+    }
 }

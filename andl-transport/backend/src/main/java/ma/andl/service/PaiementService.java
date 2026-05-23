@@ -71,4 +71,31 @@ public class PaiementService {
                 .etudiantPrenom(p.getInscription().getEtudiant().getPrenom())
                 .build();
     }
+    // ma/andl/service/PaiementService.java - Ajouter cette méthode
+    public List<MesPaiementsResponse> getMesPaiements(String email) {
+        Etudiant etudiant = utilisateurRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Étudiant non trouvé"));
+
+        List<Paiement> paiements = paiementRepository.findByInscriptionEtudiantOrderByDatePaiementDesc(etudiant);
+
+        return paiements.stream().map(paiement -> {
+            Inscription inscription = paiement.getInscription();
+            return MesPaiementsResponse.builder()
+                    .id(paiement.getId())
+                    .periode(getPeriodeFromDate(paiement.getDatePaiement()))
+                    .montant(paiement.getMontant())
+                    .datePaiement(paiement.getDatePaiement())
+                    .statut(paiement.getStatut().name())
+                    .methodePaiement(paiement.getMethodePaiement())
+                    .typeAbonnement(inscription != null ? inscription.getTypeAbonnement().name() : "MENSUEL")
+                    .factureId(paiement.getFacture() != null ? paiement.getFacture().getId() : null)
+                    .factureUrl(paiement.getFacture() != null ? "/api/factures/" + paiement.getFacture().getId() + "/pdf" : null)
+                    .build();
+        }).collect(Collectors.toList());
+    }
+
+    private String getPeriodeFromDate(LocalDate date) {
+        if (date == null) return "N/A";
+        return date.getMonth().getDisplayName(TextStyle.FULL, Locale.FRENCH) + " " + date.getYear();
+    }
 }

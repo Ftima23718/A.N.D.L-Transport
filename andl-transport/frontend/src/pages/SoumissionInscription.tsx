@@ -16,19 +16,21 @@ const SoumissionInscription: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await Promise.all([
-          api.get('/etablissements'), // Pour l'instant placeholder, devrait être /lignes
-          api.get('/admin/stats') // Pour l'instant placeholder, devrait être /tarifs
+        const [lignesRes, tarifsRes] = await Promise.all([
+          api.get('/transport/lignes'),
+          api.get('/transport/tarifs')
         ]);
-        // Mock data if API is empty
-        setLignes([{ id: 1, nom: 'Ligne 1: Lkouirate - Centre' }, { id: 2, nom: 'Ligne 2: Lkouirate - Campus' }]);
-        setTarifs([
-          { type: 'MENSUEL', montant: 150 },
-          { type: 'TRIMESTRIEL', montant: 400 },
-          { type: 'ANNUEL', montant: 1400 }
-        ]);
+
+        setLignes(lignesRes.data || []);
+        setTarifs(tarifsRes.data || []);
       } catch (err) {
         console.error('Erreur chargement données', err);
+        setLignes([{ id: 1, nom: 'Ligne 1: Lkouirate - Centre' }, { id: 2, nom: 'Ligne 2: Lkouirate - Campus' }]);
+        setTarifs([
+          { typeAbonnement: 'MENSUEL', montant: 150 },
+          { typeAbonnement: 'TRIMESTRIEL', montant: 400 },
+          { typeAbonnement: 'ANNUEL', montant: 1400 }
+        ]);
       }
     };
     fetchData();
@@ -81,26 +83,26 @@ const SoumissionInscription: React.FC = () => {
               <div className="grid grid-cols-1 gap-3">
                 {tarifs.map((t) => (
                   <label 
-                    key={t.type}
+                    key={t.typeAbonnement}
                     className={`relative p-4 rounded-2xl border-2 cursor-pointer transition-all ${
-                      selectedType === t.type ? 'border-blue-600 bg-blue-50/50' : 'border-slate-100 hover:border-slate-200 bg-white'
+                      selectedType === t.typeAbonnement ? 'border-blue-600 bg-blue-50/50' : 'border-slate-100 hover:border-slate-200 bg-white'
                     }`}
                   >
                     <input 
                       type="radio" 
                       name="typeAbonnement" 
-                      value={t.type} 
+                      value={t.typeAbonnement} 
                       className="hidden"
-                      onChange={() => setSelectedType(t.type)}
+                      onChange={() => setSelectedType(t.typeAbonnement)}
                     />
                     <div className="flex justify-between items-center">
                       <div>
-                        <span className="font-bold text-slate-800">{t.type}</span>
-                        <p className="text-xs text-slate-400">Paiement {t.type.toLowerCase()}</p>
+                        <span className="font-bold text-slate-800">{t.typeAbonnement}</span>
+                        <p className="text-xs text-slate-400">Paiement {t.typeAbonnement.toLowerCase()}</p>
                       </div>
                       <span className="text-lg font-black text-blue-600">{t.montant} DH</span>
                     </div>
-                    {selectedType === t.type && (
+                    {selectedType === t.typeAbonnement && (
                       <motion.div layoutId="outline" className="absolute -inset-0.5 border-2 border-blue-600 rounded-2xl pointer-events-none" />
                     )}
                   </label>

@@ -27,13 +27,9 @@ const AdminDashboard: React.FC = () => {
     fetchData();
   }, []);
 
-  const trendsData = stats?.mensualInscriptions || [
-    { name: 'Jan', value: 0 }, { name: 'Feb', value: 0 }, { name: 'Mar', value: 0 }
-  ];
+  const trendsData = Object.entries(stats?.inscriptionsParMois || { Jan: 0, Feb: 0, Mar: 0 }).map(([name, value]) => ({ name, value }));
 
-  const revenueData = stats?.mensualRevenue || [
-    { name: 'Jan', value: 0 }, { name: 'Feb', value: 0 }, { name: 'Mar', value: 0 }
-  ];
+  const revenueData = Object.entries(stats?.revenusParMois || { Jan: 0, Feb: 0, Mar: 0 }).map(([name, value]) => ({ name, value }));
 
   const statCards = [
     { label: 'Total Étudiants', value: stats?.totalEtudiants || 0, icon: Users, color: 'blue', trend: '+12%', sub: 'Nouveaux ce mois' },

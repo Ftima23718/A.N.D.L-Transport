@@ -199,6 +199,15 @@ const GestionEtudiantsPage: React.FC = () => {
                                         />
                                     </label>
                                     <label className="block">
+                                        <span className="text-sm font-semibold text-slate-600">Date de naissance</span>
+                                        <input 
+                                            type="date" 
+                                            value={selectedEtudiant.dateNaissance ? selectedEtudiant.dateNaissance.split('T')[0] : ''}
+                                            onChange={e => setSelectedEtudiant({...selectedEtudiant, dateNaissance: e.target.value})}
+                                            className="mt-1 w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+                                        />
+                                    </label>
+                                    <label className="block">
                                         <span className="text-sm font-semibold text-slate-600">Niveau Scolaire</span>
                                         <input 
                                             type="text" 

@@ -1,10 +1,10 @@
+// ma/andl/dto/response/BadgeResponse.java
 package ma.andl.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDate;
 
 @Data
@@ -17,7 +17,7 @@ public class BadgeResponse {
     private LocalDate dateExpiration;
     private boolean estValide;
     private String qrCodeBase64;
-    
+
     // Infos requises sur la carte
     private String numeroEtudiant;
     private String etudiantNom;
@@ -27,4 +27,6 @@ public class BadgeResponse {
     private String anneeScolaire;
     private LocalDate dateNaissance;
     private String ligneNom;
+    private String photoUrl;
+    private String telephone;
 }
